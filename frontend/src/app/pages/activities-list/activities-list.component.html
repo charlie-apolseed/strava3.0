@@ -1,1 +1,42 @@
-<p>activities-list works!</p>
+<div class="row gy">
+    <div class="col-6 activities-list-container">
+        <!--Title-->
+        <h1 class="title">Activities</h1>
+        <hr>
+        <!--FILTER-->
+        <div class="row gy filter-continer justify-content-between">
+            <div class="col">
+                <h2 class="ms-2">Filter </h2>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary btn-rounded-corners">Fetch New Activities</button>
+            </div>
+        </div>
+        <!--Activities list-->
+        <div class="list-content">
+            <ol class="list-group" >
+                <li *ngFor="let activity of activities" class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="ms-2">
+                        <div class="fw-bold activitiy-title">{{ activity.title }}</div>
+                        <div class="activity-date">{{ activity.date }}</div>
+                    </div>
+                    <div>
+                        <div><small class="text-muted">Distance</small></div>
+                        <span>{{ activity.distance }}km</span>
+                    </div>
+                    <div>
+                        <div><small class="text-muted">Avg HR</small></div>
+                        <span>{{ activity.avgHeartRate }} bpm</span>
+                    </div>
+                    <div>
+                        <div><small class="text-muted">Duration</small></div>
+                        <span>{{ activity.duration }}</span>
+                    </div>
+                    <div>
+                        <b>X</b>
+                    </div>
+                </li>                
+            </ol>
+        </div>
+    </div>
+</div>

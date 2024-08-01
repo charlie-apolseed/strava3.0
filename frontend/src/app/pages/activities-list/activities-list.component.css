@@ -1,0 +1,14 @@
+.activities-list-container {
+    margin: 1%;
+    padding: 1%;
+    background-color: rgb(189, 215, 239);
+    border-radius: 5px;
+    height: 90vh;
+}
+
+.activities-list-container .list-content{
+    background-color: rgb(83, 123, 158);
+    height: 80%;
+    border-radius: 5px;
+}
+
