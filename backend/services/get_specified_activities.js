@@ -24,7 +24,7 @@ async function getSpecifiedActivities(page) {
             responseData = await response.json();
 
             if (!response.ok) {
-                throw new Error(`Error fetching activities: ${responseData.message}`);
+                throw new Error(`getSpecifiedActivities(): Error fetching activities: ${responseData.message}`);
             }
 
             // Process the response from the Strava API.
@@ -38,12 +38,13 @@ async function getSpecifiedActivities(page) {
                         avgHeartRate: returnedActivity.average_heartrate,
                         maxHeartRate: returnedActivity.max_heartrate,
                         mapData: returnedActivity.map
-                    };
+                    }; 
                     allActivities.push(processedActivity);
                 }
             });
 
             page++;
+            setTimeout(5);
         } while (responseData.length > 0);
 
         return allActivities;

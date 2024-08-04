@@ -1,42 +1,104 @@
-<div class="row gy">
-    <div class="col-6 activities-list-container">
-        <!--Title-->
-        <h1 class="title">Activities</h1>
-        <hr>
-        <!--FILTER-->
-        <div class="row gy filter-continer justify-content-between">
-            <div class="col">
-                <h2 class="ms-2">Filter </h2>
-            </div>
-            <div class="col-3">
-                <button class="btn btn-primary btn-rounded-corners">Fetch New Activities</button>
+<header class="p-2">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="logo-container d-flex align-items-center justify-content-center text-decoration-none"
+                style="height: 25px;">
+                <img class="bi me-2" width="32" height="32" role="img" src="icons/mountain-icon-50.png">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto ms-1 mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 me-3" style="color: rgb(255, 0, 255); font-weight: 600;">Strava
+                        Visualizer</a></li>
+                <li><a href="#" class="nav-link px-2 text-secondary">Activities</a></li>
+                <li><a href="#" class="nav-link px-2 text-black">Map</a></li>
+                <li><a href="#" class="nav-link px-2 text-black">Training Log</a></li>
+                <li><a href="#" class="nav-link px-2 text-black">Progress</a></li>
+            </ul>
+
+
+
+            <div class="text-end">
+                <button type="button" class="btn" style="background-color: rgb(0, 0, 0); color: white;">Home</button>
             </div>
         </div>
+    </div>
+    <hr class="mb-0">
+</header>
+
+
+
+<div class="row">
+    <!--Activities List-->
+    <div class="col-6 activities-list-container ps-5">
+        <!--Filter + Search-->
+        <div class="filter-items d-flex p-2 align-items-center justify-content-between">
+            <div class="activity-search position-relative">
+                <i class="fas fa-search position-absolute"></i>
+                <input type="text" class="form-control" placeholder="Search activities">
+            </div>
+
+
+            <button class="btn btn-secondary d-flex align-items-center pe-5 me-2" type="button"
+                (click)="displayFilterInfo()">
+                <img src="icons/filter-icon.png" alt="Filter Logo" class="filter-icon me-1">
+                Filter
+            </button>
+
+        </div>
+        <!--Filter-->
+
         <!--Activities list-->
         <div class="list-content">
-            <ol class="list-group" >
-                <li *ngFor="let activity of activities" class="list-group-item d-flex justify-content-between align-items-center">
+            <ol class="list-group">
+                <li *ngFor="let activity of activities; let i = index"
+                    class="list-group-item d-flex justify-content-between align-items-center"
+                    [class.expanded]="expandedActivityIndex === i" (click)="toggleActivity(i)">
                     <div class="ms-2">
-                        <div class="fw-bold activitiy-title">{{ activity.title }}</div>
-                        <div class="activity-date">{{ activity.date }}</div>
+                        <div class="fw-bold activity-title">{{ activity.title }}</div>
+                        <div class="activity-date text-muted">{{ activity.date | date: 'MMMM d, yyyy \'at\' h:mm a' }}
+                            <div *ngIf="expandedActivityIndex === i" class="expanded-content">Test Location</div>
+                        </div>
                     </div>
-                    <div>
-                        <div><small class="text-muted">Distance</small></div>
-                        <span>{{ activity.distance }}km</span>
+                    <div *ngIf="expandedActivityIndex !== i" class="distance-box"
+                        [style.backgroundColor]="getColorForDistance(activity.distance)">
+                        {{ activity.distance / 1000 | number:'1.1-1' }} km
                     </div>
-                    <div>
-                        <div><small class="text-muted">Avg HR</small></div>
-                        <span>{{ activity.avgHeartRate }} bpm</span>
+                    <div *ngIf="expandedActivityIndex === i" class="expanded-content">
+                        <div>
+                            <div><small class="text-muted">Distance</small></div>
+                            <span>{{ activity.distance / 1000 | number:'1.1-1' }} km</span>
+                        </div>
+                        <div>
+                            <div><small class="text-muted">Avg HR</small></div>
+                            <span>{{ activity.avgHeartRate }} bpm</span>
+                        </div>
+                        <div>
+                            <div><small class="text-muted">Duration</small></div>
+                            <span *ngIf="activity.duration >= 3600; else underAnHour">
+                                {{ (activity.duration / 3600) | number:'1.0-0' }} hours
+                                {{ ((activity.duration % 3600) / 60) | number:'1.0-0' }} min
+                            </span>
+                            <ng-template #underAnHour>
+                                <span>
+                                    {{ ((activity.duration % 3600) / 60) | number:'1.0-0' }} m
+                                    {{ (activity.duration % 60) | number:'1.0-0' }} sec
+                                </span>
+                            </ng-template>
+                        </div>
                     </div>
-                    <div>
-                        <div><small class="text-muted">Duration</small></div>
-                        <span>{{ activity.duration }}</span>
-                    </div>
-                    <div>
-                        <b>X</b>
-                    </div>
-                </li>                
+                </li>
+
             </ol>
+        </div>
+    </div>
+    <!--Map-->
+    <div class="col-6 map-and-info-container pe-5">
+        <div class="map-container">
+            <div id="map" style="height: 500px;"></div>
+        </div>
+        <div class="info-container">
+            <h1>Test Info</h1>
+            <p>Lorem Ipsum</p>
         </div>
     </div>
 </div>

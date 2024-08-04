@@ -1,14 +1,145 @@
+.logo-container p {
+    font-weight: 600;
+    font-size: 150%;
+    color: rgb(255, 0, 255);
+}
+
+button {
+    background-color: black;
+    color: white;
+}
+
+.activity-search {
+    outline: none;
+    /* Remove the default focus outline */
+    position: relative;
+    /* Ensure the icon and input are positioned correctly */
+    border: 1px solid #ccc;
+    /* Subtle border color */
+    border-radius: 5px;
+    /* Rounded corners for a modern look */
+    background-color: #f9f9f9;
+    /* Light background color */
+    padding-left: 35px;
+    /* Space for the icon */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* Light shadow for depth */
+    transition: box-shadow 0.3s ease;
+    /* Smooth transition for hover effects */
+}
+
+.activity-search input {
+    border: none;
+    /* No border for the input field itself */
+    outline: none;
+    /* Remove the default focus outline */
+    width: 100%;
+    /* Full width input */
+    background-color: transparent;
+    /* Match the background */
+    padding: 8px 0;
+    /* Vertical padding, horizontal is handled by the container */
+}
+
+.activity-search input:focus {
+    outline: none;
+    /* Remove the blue outline when the input is focused */
+    box-shadow: none;
+    /* Optionally, remove any box-shadow effect */
+}
+
+.activity-search input::placeholder {
+    color: #999;
+    /* Light gray placeholder text */
+}
+
+.activity-search .fa-search {
+    position: absolute;
+    /* Position the icon within the container */
+    top: 50%;
+    /* Center the icon vertically */
+    left: 10px;
+    /* Position the icon from the left edge */
+    transform: translateY(-50%);
+    /* Center the icon vertically */
+    color: #999;
+    /* Light gray icon color */
+    pointer-events: none;
+    /* Prevent the icon from interfering with input */
+}
+
+.activity-search:hover {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    /* Slightly darker shadow on hover */
+}
+
+
+.filter-icon {
+    height: 30px;
+    width: 30px;
+    border-radius: 3px;
+}
+
+
 .activities-list-container {
-    margin: 1%;
-    padding: 1%;
-    background-color: rgb(189, 215, 239);
+    background-color: var(--list-color);
+    padding: 10px;
     border-radius: 5px;
-    height: 90vh;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.activities-list-container .list-content{
-    background-color: rgb(83, 123, 158);
-    height: 80%;
-    border-radius: 5px;
+.list-group-item {
+    cursor: pointer;
 }
 
+.list-group-item .expanded-content {
+    display: none;
+}
+
+.list-group-item.expanded .expanded-content {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    /* Spread out items across the full width */
+    align-items: center;
+    /* Vertically center items */
+    flex-wrap: wrap;
+    /* Wrap items if necessary */
+}
+
+.list-group-item.expanded {
+    background-color: #f8f9fa;
+    height: 100px;
+}
+
+.activity-title {
+    font-weight: bold;
+}
+
+.activity-date {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.distance-box {
+    display: flex;
+    width: 90px;
+    height: 40px;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: end;
+    /* Align content to the end (right) */
+    padding-right: 10px;
+    font-weight: bold;
+}
+
+
+#map {
+    width: 100%;
+    height: 500px;
+    /* Adjust the height as needed */
+}
+
+.map-container {
+    border: 1px solid #ddd;
+}
