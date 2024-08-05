@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import Activity from '../../models/activity';
 import { ActivitiesService } from '../../activities.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-// Note: Do not import 'leaflet' at the top level
 import { decode } from '@googlemaps/polyline-codec';
 
 @Component({
@@ -15,8 +14,13 @@ import { decode } from '@googlemaps/polyline-codec';
 export class ActivitiesListComponent implements OnInit {
   activities: Activity[] = [];
   showFilter = false;
+
   private map!: L.Map;
   private polylines: L.Polyline[] = [];
+  private markers: L.Marker[] = []; // To keep track of markers
+
+  expandedActivityIndex: number | null = null;
+  expandedActivity : Activity | null = null;
 
   constructor(private activitiesService: ActivitiesService, @Inject(PLATFORM_ID) private platformId: Object) { }
 
@@ -35,7 +39,6 @@ export class ActivitiesListComponent implements OnInit {
     return new Promise((resolve, reject) => {
       if (isPlatformBrowser(this.platformId)) {
         import('leaflet').then(L => {
-          // Attach Leaflet to window if necessary
           window['L'] = L;
           resolve(L);
         }).catch(error => reject(error));
@@ -55,15 +58,17 @@ export class ActivitiesListComponent implements OnInit {
     }).addTo(this.map);
   }
 
-  expandedActivityIndex: number | null = null;
-
   toggleActivity(index: number): void {
     if (this.expandedActivityIndex === index) {
       this.expandedActivityIndex = null;
+      this.expandedActivity = null;
       this.clearPolylines();
+      this.clearMarkers();
     } else {
       this.expandedActivityIndex = index;
+      this.expandedActivity = this.activities[this.expandedActivityIndex];
       this.clearPolylines();
+      this.clearMarkers();
       this.addPolyline(index);
     }
   }
@@ -71,6 +76,11 @@ export class ActivitiesListComponent implements OnInit {
   private clearPolylines(): void {
     this.polylines.forEach(polyline => this.map.removeLayer(polyline));
     this.polylines = [];
+  }
+
+  private clearMarkers(): void {
+    this.markers.forEach(marker => this.map.removeLayer(marker));
+    this.markers = [];
   }
 
   private addPolyline(index: number): void {
@@ -83,10 +93,14 @@ export class ActivitiesListComponent implements OnInit {
 
     // Decode the polyline
     const coordinates = decode(encodedPolyline).map(coord => [coord[0], coord[1]] as [number, number]);
+    const startCoordinate = coordinates[0];
+    const endCoordinate = coordinates[coordinates.length - 1];
+
+    const L = window['L'];
 
     // Create and add the polyline to the map
-    const polyline = window['L'].polyline(coordinates, {
-      color: 'red',
+    const polyline = L.polyline(coordinates, {
+      color: 'rgb(255, 0, 255)', // Bright magenta
       weight: 5,
       opacity: 0.7,
       lineJoin: 'round'
@@ -94,10 +108,32 @@ export class ActivitiesListComponent implements OnInit {
 
     this.polylines.push(polyline);
 
-    // Adjust the map view to the polyline bounds
+    // Add a marker at the start of the polyline
+    const startMarker = L.marker(startCoordinate, {
+      icon: L.icon({
+        iconUrl: 'icons/start-icon.png', 
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+      })
+    }).addTo(this.map);
+
+    // Add a marker at the end of the polyline
+    const endMarker = L.marker(endCoordinate, {
+      icon: L.icon({
+        iconUrl: 'icons/finish-icon.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+      })
+    }).addTo(this.map);
+
+    this.markers.push(startMarker, endMarker);
+
+    // Adjust the map view to fit the polyline bounds
     this.map.fitBounds(polyline.getBounds());
   }
 
+  ////////////////////////////////////
+  /*Logic for displaying filter info*/
   displayFilterInfo(): void {
     this.showFilter = !this.showFilter;
   }

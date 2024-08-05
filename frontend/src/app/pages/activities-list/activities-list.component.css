@@ -84,6 +84,8 @@ button {
 .activities-list-container {
     background-color: var(--list-color);
     padding: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -100,11 +102,8 @@ button {
     display: flex;
     gap: 10px;
     justify-content: space-between;
-    /* Spread out items across the full width */
     align-items: center;
-    /* Vertically center items */
     flex-wrap: wrap;
-    /* Wrap items if necessary */
 }
 
 .list-group-item.expanded {
@@ -112,8 +111,20 @@ button {
     height: 100px;
 }
 
+
 .activity-title {
     font-weight: bold;
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap; /* Prevent text from wrapping */
+    text-overflow: ellipsis;
+}
+
+.list-group-item.expanded .activity-title {
+    width: 300px; 
+    white-space: normal; 
+    text-overflow: clip;
+    overflow: visible; 
 }
 
 .activity-date {
@@ -128,18 +139,51 @@ button {
     border-radius: 5px;
     align-items: center;
     justify-content: end;
-    /* Align content to the end (right) */
     padding-right: 10px;
     font-weight: bold;
 }
 
 
+/*******MAP AND INFO*********/
+
+
 #map {
     width: 100%;
-    height: 500px;
+    height: 400px;
     /* Adjust the height as needed */
 }
 
 .map-container {
     border: 1px solid #ddd;
+}
+
+.info-container {
+    padding: 15px;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.metric-value .unit {
+    font-size: 0.6em; /* Make the unit smaller */
+    font-weight: normal; /* Normal weight for the unit text */
+    vertical-align: middle; /* Aligns the unit with the number */
+    margin-left: 0.2em; /* Small space between the number and the unit */
+}
+
+.metrics-label{
+    font-weight: 600;
+    font-size: 150%;
+    margin-bottom: 0;
+    overflow: hidden;
+    white-space: nowrap; /* Prevent text from wrapping */
+    text-overflow: ellipsis;
+}
+
+.notes-label{
+    font-weight: 600;
+    font-size: 150%;
 }

@@ -3,7 +3,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a href="/" class="logo-container d-flex align-items-center justify-content-center text-decoration-none"
                 style="height: 25px;">
-                <img class="bi me-2" width="32" height="32" role="img" src="icons/mountain-icon-50.png">
+                <img class="bi me-2" width="32" height="32" role="img" src="icons/mountain-icon-50.png" alt="Logo">
             </a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto ms-1 mb-2 justify-content-center mb-md-0">
@@ -15,39 +15,31 @@
                 <li><a href="#" class="nav-link px-2 text-black">Progress</a></li>
             </ul>
 
-
-
             <div class="text-end">
-                <button type="button" class="btn" style="background-color: rgb(0, 0, 0); color: white;">Home</button>
+                <button type="button" class="btn btn-dark">Home</button>
             </div>
         </div>
     </div>
     <hr class="mb-0">
 </header>
 
-
-
-<div class="row">
-    <!--Activities List-->
-    <div class="col-6 activities-list-container ps-5">
-        <!--Filter + Search-->
+<div class="d-flex">
+    <!-- Activities List -->
+    <div class="col-5 activities-list-container">
+        <!-- Filter + Search -->
         <div class="filter-items d-flex p-2 align-items-center justify-content-between">
             <div class="activity-search position-relative">
                 <i class="fas fa-search position-absolute"></i>
                 <input type="text" class="form-control" placeholder="Search activities">
             </div>
-
-
             <button class="btn btn-secondary d-flex align-items-center pe-5 me-2" type="button"
                 (click)="displayFilterInfo()">
                 <img src="icons/filter-icon.png" alt="Filter Logo" class="filter-icon me-1">
                 Filter
             </button>
-
         </div>
-        <!--Filter-->
 
-        <!--Activities list-->
+        <!-- Activities list -->
         <div class="list-content">
             <ol class="list-group">
                 <li *ngFor="let activity of activities; let i = index"
@@ -55,7 +47,8 @@
                     [class.expanded]="expandedActivityIndex === i" (click)="toggleActivity(i)">
                     <div class="ms-2">
                         <div class="fw-bold activity-title">{{ activity.title }}</div>
-                        <div class="activity-date text-muted">{{ activity.date | date: 'MMMM d, yyyy \'at\' h:mm a' }}
+                        <div class="activity-date text-muted">
+                            {{ activity.date | date: 'MMMM d, yyyy \'at\' h:mm a' }}
                             <div *ngIf="expandedActivityIndex === i" class="expanded-content">Test Location</div>
                         </div>
                     </div>
@@ -67,10 +60,6 @@
                         <div>
                             <div><small class="text-muted">Distance</small></div>
                             <span>{{ activity.distance / 1000 | number:'1.1-1' }} km</span>
-                        </div>
-                        <div>
-                            <div><small class="text-muted">Avg HR</small></div>
-                            <span>{{ activity.avgHeartRate }} bpm</span>
                         </div>
                         <div>
                             <div><small class="text-muted">Duration</small></div>
@@ -87,18 +76,132 @@
                         </div>
                     </div>
                 </li>
-
             </ol>
         </div>
     </div>
-    <!--Map-->
-    <div class="col-6 map-and-info-container pe-5">
+
+    <!-- Map -->
+    <div class="map-and-info-container pe-4">
         <div class="map-container">
-            <div id="map" style="height: 500px;"></div>
+            <div id="map"></div>
         </div>
-        <div class="info-container">
-            <h1>Test Info</h1>
-            <p>Lorem Ipsum</p>
+        <div *ngIf="expandedActivityIndex !== null && expandedActivity !== null" class="info-container">
+            <div class="d-flex">
+                <div class="col-7 metric-grid">
+                    <h2 class="metrics-label mb-3">{{expandedActivity.title}}</h2>
+                    <div class="d-flex justify-content-between metric-row">
+                        <div>
+                            <div class="distance-metric-container">
+                                <small class="text-muted">Total Distance</small>
+                                <h2 class="metric-value distance">{{ expandedActivity.distance / 1000 | number:'1.1-1' }}<small class="unit">km</small></h2>
+                                <small class="metric-ranking text-muted distance">10/999</small>
+                            </div>
+                            <hr>
+                            <div class="elevation-metric-container">
+                                <small class="text-muted">Elevation</small>
+                                <h2 class="metric-value elevation" *ngIf="expandedActivity.elevation === null">N/A</h2>
+                                <h2 class="metric-value elevation" *ngIf="expandedActivity.elevation !== null">{{expandedActivity.elevation}}<small class="unit">m</small></h2>
+                                <small class="metric-ranking text-muted elevation">10/999</small>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="heartrate-metric-container">
+                                <small class="text-muted">Avg Heart Rate</small>
+                                <div class="div" *ngIf="expandedActivity.avgHeartRate != null">
+                                    <h2 class="metric-value heartrate">{{expandedActivity.avgHeartRate}}<small class="unit">bpm</small></h2>
+                                    <small class="metric-ranking text-muted heartrate">Max: {{expandedActivity.maxHeartRate}} bpm</small>    
+                                </div>
+                                <div class="div" *ngIf="expandedActivity.avgHeartRate == null">
+                                    <h2 class="metric-value heartrate">N/A</h2>
+                                    <small class="metric-ranking text-muted heartrate">Max: N/A</small>    
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="strain-metric-container">
+                                <small class="text-muted">Strain</small>
+                                <h2 class="metric-value strain">130<small class="unit">tss</small></h2>
+                                <small class="metric-ranking text-muted strain">10/999</small>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="duration-metric-container">
+                                <small class="text-muted">Duration</small>
+                                <h2 class="metric-value distance">1:20:12</h2>
+                                <small class="metric-ranking text-muted distance">10/999</small>
+                            </div>
+                            <hr>
+                            <div class="speed-metric-container">
+                                <small class="text-muted">Avg Speed</small>
+                                <h2 class="metric-value distance">51<small class="unit">km/hr</small></h2>
+                                <small class="metric-ranking text-muted speed">Max: 600km/hr</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vr mx-3"></div>
+                <div class="col notes-container">
+                    <h2 class="notes-label">Notes </h2>
+                    <p>Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem
+                        Ipsum</p>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="expandedActivityIndex === null" class="info-container">
+            <div class="d-flex">
+                <div class="col-7 metric-grid">
+                    <h2 class="metrics-label mb-3">Select Activity to Display</h2>
+                    <div class="d-flex justify-content-between metric-row">
+                        <div>
+                            <div class="distance-metric-container">
+                                <small class="text-muted">Total Distance</small>
+                                <h2 class="metric-value distance">N/A</h2>
+                                <small class="metric-ranking text-muted distance">10/999</small>
+                            </div>
+                            <hr>
+                            <div class="elevation-metric-container">
+                                <small class="text-muted">Elevation</small>
+                                <h2 class="metric-value elevation">N/A</h2>
+                                <small class="metric-ranking text-muted elevation">10/999</small>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="heartrate-metric-container">
+                                <small class="text-muted">Avg Heart Rate</small>
+                                <h2 class="metric-value heartrate">130<small class="unit">bpm</small></h2>
+                                <small class="metric-ranking text-muted heartrate">Max: 175bpm</small>
+                            </div>
+                            <hr>
+                            <div class="strain-metric-container">
+                                <small class="text-muted">Strain</small>
+                                <h2 class="metric-value strain">130<small class="unit">tss</small></h2>
+                                <small class="metric-ranking text-muted strain">10/999</small>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="duration-metric-container">
+                                <small class="text-muted">Duration</small>
+                                <h2 class="metric-value distance">1:20:12</h2>
+                                <small class="metric-ranking text-muted distance">10/999</small>
+                            </div>
+                            <hr>
+                            <div class="speed-metric-container">
+                                <small class="text-muted">Avg Speed</small>
+                                <h2 class="metric-value distance">51<small class="unit">km/hr</small></h2>
+                                <small class="metric-ranking text-muted speed">Max: 600km/hr</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vr mx-3"></div>
+                <div class="col notes-container">
+                    <h2 class="notes-label">Notes </h2>
+                    <p>Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum,
+                        Lorem
+                        Ipsum</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

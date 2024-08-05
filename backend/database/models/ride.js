@@ -20,11 +20,26 @@ const RideSchema = new mongoose.Schema({
     avgHeartRate: {
         type: Number
     },
+    avgSpeed: {
+        type: Number
+    },
+    maxSpeed: {
+        type: Number
+    },
     maxHeartRate: {
+        type: Number
+    },
+    elevation: {
         type: Number
     },
     mapData: {
         type: Object
+    },
+    notes: {
+        type: String
+    },
+    images: {
+        type: [String]
     }
 } )
 

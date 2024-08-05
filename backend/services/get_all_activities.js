@@ -37,9 +37,14 @@ async function getAllActivities() {
                         date: returnedActivity.start_date_local,
                         duration: returnedActivity.moving_time,
                         distance: returnedActivity.distance, // Add distance
+                        avgSpeed: returnedActivity.average_speed,
+                        maxSpeed: returnedActivity.max_speed,
+                        elevation: returnedActivity.total_elevation_gain,
                         avgHeartRate: returnedActivity.average_heartrate,
                         maxHeartRate: returnedActivity.max_heartrate,
-                        mapData: returnedActivity.map
+                        mapData: returnedActivity.map,
+                        notes: "",
+                        images: []
                     };
                     allActivities.push(processedActivity);
                 }
