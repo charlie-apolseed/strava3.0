@@ -10,6 +10,7 @@ export default class Activity {
   title: string;
   date: string;
   duration: number;
+  restTime: number;
   avgSpeed: number;
   maxSpeed: number;
   distance: number;
@@ -25,6 +26,7 @@ export default class Activity {
     title: string,
     date: string,
     duration: number,
+    restTime: number,
     avgSpeed: number,
     maxSpeed: number,
     distance: number,
@@ -40,6 +42,7 @@ export default class Activity {
     this.title = title;
     this.date = date;
     this.duration = duration;
+    this.restTime = restTime;
     this.distance = distance;
     this.elevation = elevation;
     this.avgHeartRate = avgHeartRate;

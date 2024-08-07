@@ -158,12 +158,16 @@ button {
 }
 
 .info-container {
-    padding: 15px;
+    padding: 15px 0px 15px 15px;
+}
+
+.metric-column {
+    width: 28%
 }
 
 .metric-value {
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: bold; 
     margin-bottom: 5px;
 }
 
@@ -186,4 +190,24 @@ button {
 .notes-label{
     font-weight: 600;
     font-size: 150%;
+}
+.notes-content {
+    height: 80%;
+    max-height: 210px;
+    width: 95%;
+    padding: 5px;
+    background-color: none;
+    border-radius: 5px;
+    word-wrap: break-word;
+    overflow-y: scroll;
+    white-space: normal; 
+}
+
+.edit-note-button{
+    height: 30px;
+}
+
+.edit-icon {
+    height: 17px;
+    width: 17px;
 }

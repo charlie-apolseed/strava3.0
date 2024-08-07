@@ -81,7 +81,7 @@
     </div>
 
     <!-- Map -->
-    <div class="map-and-info-container pe-4">
+    <div class="col map-and-info-container pe-4">
         <div class="map-container">
             <div id="map"></div>
         </div>
@@ -90,59 +90,88 @@
                 <div class="col-7 metric-grid">
                     <h2 class="metrics-label mb-3">{{expandedActivity.title}}</h2>
                     <div class="d-flex justify-content-between metric-row">
-                        <div>
+                        <div class="metric-column">
                             <div class="distance-metric-container">
                                 <small class="text-muted">Total Distance</small>
-                                <h2 class="metric-value distance">{{ expandedActivity.distance / 1000 | number:'1.1-1' }}<small class="unit">km</small></h2>
+                                <h2 class="metric-value distance">{{ expandedActivity.distance / 1000 | number:'1.1-1'
+                                    }}<small class="unit text-muted">km</small></h2>
                                 <small class="metric-ranking text-muted distance">10/999</small>
                             </div>
                             <hr>
                             <div class="elevation-metric-container">
                                 <small class="text-muted">Elevation</small>
                                 <h2 class="metric-value elevation" *ngIf="expandedActivity.elevation === null">N/A</h2>
-                                <h2 class="metric-value elevation" *ngIf="expandedActivity.elevation !== null">{{expandedActivity.elevation}}<small class="unit">m</small></h2>
+                                <h2 class="metric-value elevation" *ngIf="expandedActivity.elevation !== null">
+                                    {{expandedActivity.elevation}}<small class="unit text-muted">m</small></h2>
                                 <small class="metric-ranking text-muted elevation">10/999</small>
                             </div>
                         </div>
-                        <div>
+                        <div class="metric-column">
                             <div class="heartrate-metric-container">
                                 <small class="text-muted">Avg Heart Rate</small>
                                 <div class="div" *ngIf="expandedActivity.avgHeartRate != null">
-                                    <h2 class="metric-value heartrate">{{expandedActivity.avgHeartRate}}<small class="unit">bpm</small></h2>
-                                    <small class="metric-ranking text-muted heartrate">Max: {{expandedActivity.maxHeartRate}} bpm</small>    
+                                    <h2 class="metric-value heartrate">{{expandedActivity.avgHeartRate}}<small
+                                            class="unit text-muted">bpm</small></h2>
+                                    <small class="metric-ranking text-muted heartrate">Max:
+                                        {{expandedActivity.maxHeartRate}} bpm</small>
                                 </div>
                                 <div class="div" *ngIf="expandedActivity.avgHeartRate == null">
                                     <h2 class="metric-value heartrate">N/A</h2>
-                                    <small class="metric-ranking text-muted heartrate">Max: N/A</small>    
+                                    <small class="metric-ranking text-muted heartrate">Max: N/A</small>
                                 </div>
                             </div>
                             <hr>
                             <div class="strain-metric-container">
                                 <small class="text-muted">Strain</small>
-                                <h2 class="metric-value strain">130<small class="unit">tss</small></h2>
+                                <h2 class="metric-value strain">130<small class="unit text-muted">tss</small></h2>
                                 <small class="metric-ranking text-muted strain">10/999</small>
                             </div>
                         </div>
-                        <div>
+                        <div class="metric-column">
                             <div class="duration-metric-container">
                                 <small class="text-muted">Duration</small>
-                                <h2 class="metric-value distance">1:20:12</h2>
-                                <small class="metric-ranking text-muted distance">10/999</small>
+                                <h2 class="metric-value duration">{{expandedActivity.duration | duration}}</h2>
+
+                                <small class="metric-ranking text-muted duration">Resting: {{expandedActivity.restTime /
+                                    60 | number: '1.0-0'}}m {{expandedActivity.restTime % 60 | number:
+                                    '1.0-0'}}s</small>
                             </div>
                             <hr>
                             <div class="speed-metric-container">
                                 <small class="text-muted">Avg Speed</small>
-                                <h2 class="metric-value distance">51<small class="unit">km/hr</small></h2>
-                                <small class="metric-ranking text-muted speed">Max: 600km/hr</small>
+                                <h2 class="metric-value distance">{{expandedActivity.avgSpeed * 3.6 | number:
+                                    '1.1-1'}}<small class="unit text-muted">km/hr</small></h2>
+                                <small class="metric-ranking text-muted speed">Max: {{expandedActivity.maxSpeed * 3.6 |
+                                    number: '1.1-1'}}km/hr</small>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="vr mx-3"></div>
-                <div class="col notes-container">
-                    <h2 class="notes-label">Notes </h2>
-                    <p>Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum, Lorem
-                        Ipsum</p>
+                <div class="col notes-section">
+                    <div class="d-flex justify-content-between">
+                        <h2 class="notes-label">Notes </h2>
+                        <button *ngIf="!editingNote"
+                            class="edit-note-button btn btn-secondary d-flex align-items-center me-3" type="button"
+                            (click)="startEditing(noteContent)">
+                            Edit
+                            <img src="/icons/edit-icon.png" alt="Edit Icon" class="edit-icon ms-2">
+                        </button>
+                        <button *ngIf="editingNote"
+                            class="edit-note-button btn btn-secondary d-flex align-items-center me-3" type="button"
+                            (click)="cancelEditing(noteContent)">
+                            <img src="icons/cancel-icon.png" alt="Cancel Icon" class="edit-icon ms-0 me-2">
+                            Cancel
+                        </button>
+                    </div>
+
+                    <p #noteContent class="notes-content" [innerHTML]="editableNotes" id="noteContent"></p>
+
+                    <button *ngIf="editingNote" class="edit-note-button btn btn-secondary d-flex align-items-center" type="button"
+                        (click)="saveEditing(noteContent)">
+                        <img src="icons/save-icon.png" alt="Save Icon" class="edit-icon ms-0 me-2">
+                        Save
+                    </button>
                 </div>
             </div>
         </div>
@@ -168,13 +197,13 @@
                         <div>
                             <div class="heartrate-metric-container">
                                 <small class="text-muted">Avg Heart Rate</small>
-                                <h2 class="metric-value heartrate">130<small class="unit">bpm</small></h2>
+                                <h2 class="metric-value heartrate">130<small class="unit text-muted">bpm</small></h2>
                                 <small class="metric-ranking text-muted heartrate">Max: 175bpm</small>
                             </div>
                             <hr>
                             <div class="strain-metric-container">
                                 <small class="text-muted">Strain</small>
-                                <h2 class="metric-value strain">130<small class="unit">tss</small></h2>
+                                <h2 class="metric-value strain">130<small class="unit text-muted">tss</small></h2>
                                 <small class="metric-ranking text-muted strain">10/999</small>
                             </div>
                         </div>
@@ -187,7 +216,7 @@
                             <hr>
                             <div class="speed-metric-container">
                                 <small class="text-muted">Avg Speed</small>
-                                <h2 class="metric-value distance">51<small class="unit">km/hr</small></h2>
+                                <h2 class="metric-value distance">51<small class="unit ">km/hr</small></h2>
                                 <small class="metric-ranking text-muted speed">Max: 600km/hr</small>
                             </div>
                         </div>

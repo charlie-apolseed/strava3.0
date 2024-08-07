@@ -34,6 +34,7 @@ async function getSpecifiedActivities(page) {
                         title: returnedActivity.name,
                         date: returnedActivity.start_date_local,
                         duration: returnedActivity.moving_time,
+                        restTime: returnedActivity.elapsed_time - returnedActivity.moving_time,
                         distance: returnedActivity.distance, // Add distance
                         avgSpeed: returnedActivity.average_speed,
                         maxSpeed: returnedActivity.max_speed,
@@ -49,7 +50,6 @@ async function getSpecifiedActivities(page) {
             });
 
             page++;
-            setTimeout(5);
         } while (responseData.length > 0);
 
         return allActivities;

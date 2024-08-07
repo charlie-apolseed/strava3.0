@@ -34,4 +34,8 @@ export class ActivitiesService {
   deleteActivity(title: string, date: string) {
     return this.webService.delete(`rides/${title}/${date}`);
   }
+
+  updateActivityNotes(title: string, date: string, notes: string) {
+    return this.webService.patch(`rides/notes/${title}/${date}`, { notes });
+  }
 }

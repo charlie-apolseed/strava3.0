@@ -80,35 +80,38 @@ app.post('/rides', async (req, res) => {
     res.send("All rides were successfully uploaded to the database.")
 })
 
-/*
-Add rides that are currently not uploaded to the database 
-*/
 app.post('/rides/update', async (req, res) => {
     const getSpecifiedActivities = require('./services/get_specified_activities.js');
     let duplicateDetected = false;
     let page = 1;
-    while (!duplicateDetected) {
-        try {
+
+    try {
+        while (!duplicateDetected) {
             const rides = await getSpecifiedActivities(page);
+            if (rides.length === 0) break; // Break loop if no more activities
+
             for (const ride of rides) {
-                const existingRide = await Ride.findOne(ride);
+                const existingRide = await Ride.findOne({ title: ride.title, date: ride.date });
                 if (!existingRide) {
                     await new Ride(ride).save();
-                    console.log(ride.title + " was saved.");
+                    console.log(`${ride.title} was saved.`);
                 } else {
-                    console.log(ride.title + " already exists in the database!");
+                    console.log(`${ride.title} already exists in the database!`);
                     duplicateDetected = true;
                     break; // Break out of the for loop
                 }
             }
             page += 1;
-        } catch (error) {
-            res.status(500).send(error);
-            break; // Exit the loop if there is an error
+        }
+        res.send('Update process completed.');
+    } catch (error) {
+        console.error('Error updating rides:', error);
+        if (!res.headersSent) {
+            res.status(500).send('An error occurred during the update process.');
         }
     }
-    res.send('Update process completed.');
 });
+
 
 /*
 Get a ride with the given title and date.
@@ -123,15 +126,9 @@ app.get('/rides/:title/:date', (req, res) => {
 /*
 Update a ride 
 */
-app.patch('/rides/:title/:date', (req, res) => {
+app.patch('/rides/notes/:title/:date', (req, res) => {
     Ride.findOneAndUpdate({ title: req.params.title, date: req.params.date }, {
-        title: req.body.title,
-        date: req.body.date,
-        duration: req.body.duration,
-        distance: req.body.distance,
-        avgHearRate: req.body.avgHeartRate,
-        maxHeartRate: req.body.maxHeartRate,
-        mapData: req.body.mapData
+        notes: req.body.notes
     }, { new: true })
         .then((ride) => res.send(ride))
         .catch((error) => console.log(error));

@@ -14,6 +14,9 @@ const RideSchema = new mongoose.Schema({
     duration: {
         type: Number
     },
+    restTime: {
+        type: Number
+    },
     distance: {
         type: Number
     },
