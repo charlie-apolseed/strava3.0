@@ -14,7 +14,7 @@ import { DurationPipe } from '../../pipes/duration.pipe';
 })
 export class ActivitiesListComponent implements OnInit {
   @ViewChild('noteContent') noteContent!: ElementRef;
-
+  displayedActivities: Activity[] = [];
   activities: Activity[] = [];
   showFilter = false;
   private map!: L.Map;
@@ -24,16 +24,66 @@ export class ActivitiesListComponent implements OnInit {
   expandedActivity: Activity | null = null;
   editingNote: boolean = false;
   editableNotes: string = '';
+  totalActivities = 0;
+  currentPage = 1;
+  activitiesPerPage = 10;
 
   constructor(private activitiesService: ActivitiesService, @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2) { }
 
   ngOnInit(): void {
-    this.activitiesService.getMostRecentActivities(10).subscribe(activities => this.activities = activities);
+    this.activitiesService.getAllActivities().subscribe(activities => {
+      this.activities = activities;
+      this.totalActivities = activities.length;
+      this.displayPage(1);
+    });
+
 
     if (isPlatformBrowser(this.platformId)) {
       this.loadLeaflet().then(() => {
         this.initMap();
       });
+    }
+  }
+
+  displayPage(page: number): void {
+    this.currentPage = page;
+    const startIndex = (page - 1) * this.activitiesPerPage;
+    const endIndex = startIndex + this.activitiesPerPage;
+    this.displayedActivities = this.activities.slice(startIndex, endIndex);
+  }
+
+  nextPage(): void {
+    if ((this.currentPage * this.activitiesPerPage) < this.totalActivities) {
+      this.displayPage(this.currentPage + 1);
+    }
+  }
+
+  toggleActivity(index: number): void {
+    if (this.expandedActivityIndex === index) {
+      this.expandedActivityIndex = null;
+      this.expandedActivity = null;
+      this.editableNotes = "";
+      const noteContent = document.getElementById("noteContent");
+      if (noteContent != null) {
+        this.cancelEditing(noteContent);
+      }
+      this.clearPolylines();
+      this.clearMarkers();
+    } else {
+      this.expandedActivityIndex = index;
+      this.expandedActivity = this.displayedActivities[this.expandedActivityIndex];
+      if (this.expandedActivity.notes !== "") {
+        this.editableNotes = this.expandedActivity.notes;
+      } else {
+        this.editableNotes = "Add your activity notes here";
+      }
+      const noteContent = document.getElementById("notesContent");
+      if (noteContent != null) {
+        this.cancelEditing(noteContent);
+      }
+      this.clearPolylines();
+      this.clearMarkers();
+      this.addPolyline(index);
     }
   }
 
@@ -60,32 +110,6 @@ export class ActivitiesListComponent implements OnInit {
     }).addTo(this.map);
   }
 
-  toggleActivity(index: number): void {
-    if (this.expandedActivityIndex === index) {
-      this.resetActivityState();
-    } else {
-      if (this.editingNote && this.noteContent) {
-        this.cancelEditing(this.noteContent.nativeElement);
-      }
-      this.expandedActivityIndex = index;
-      this.expandedActivity = this.activities[this.expandedActivityIndex];
-      this.editableNotes = this.expandedActivity.notes || 'Add your activity notes here';
-      this.clearPolylines();
-      this.clearMarkers();
-      this.addPolyline(index);
-    }
-  }
-
-  private resetActivityState(): void {
-    this.expandedActivityIndex = null;
-    this.expandedActivity = null;
-    this.editableNotes = '';
-    if (this.noteContent) {
-      this.cancelEditing(this.noteContent.nativeElement);
-    }
-    this.clearPolylines();
-    this.clearMarkers();
-  }
 
   private clearPolylines(): void {
     this.polylines.forEach(polyline => this.map.removeLayer(polyline));

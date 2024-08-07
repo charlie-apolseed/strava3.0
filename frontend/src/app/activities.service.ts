@@ -12,7 +12,7 @@ export class ActivitiesService {
   constructor(private webService: WebService) { }
 
   getAllActivities() {
-    return this.webService.get('rides');
+    return this.webService.get('rides') as Observable<Activity[]>;
   }
 
   /** Gets the specified number of rides */

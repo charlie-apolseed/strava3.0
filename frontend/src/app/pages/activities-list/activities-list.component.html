@@ -42,41 +42,27 @@
         <!-- Activities list -->
         <div class="list-content">
             <ol class="list-group">
-                <li *ngFor="let activity of activities; let i = index"
+                <li *ngFor="let activity of displayedActivities; let i = index"
                     class="list-group-item d-flex justify-content-between align-items-center"
                     [class.expanded]="expandedActivityIndex === i" (click)="toggleActivity(i)">
                     <div class="ms-2">
                         <div class="fw-bold activity-title">{{ activity.title }}</div>
                         <div class="activity-date text-muted">
                             {{ activity.date | date: 'MMMM d, yyyy \'at\' h:mm a' }}
-                            <div *ngIf="expandedActivityIndex === i" class="expanded-content">Test Location</div>
                         </div>
                     </div>
-                    <div *ngIf="expandedActivityIndex !== i" class="distance-box"
+                    <div class="distance-box"
                         [style.backgroundColor]="getColorForDistance(activity.distance)">
                         {{ activity.distance / 1000 | number:'1.1-1' }} km
                     </div>
-                    <div *ngIf="expandedActivityIndex === i" class="expanded-content">
-                        <div>
-                            <div><small class="text-muted">Distance</small></div>
-                            <span>{{ activity.distance / 1000 | number:'1.1-1' }} km</span>
-                        </div>
-                        <div>
-                            <div><small class="text-muted">Duration</small></div>
-                            <span *ngIf="activity.duration >= 3600; else underAnHour">
-                                {{ (activity.duration / 3600) | number:'1.0-0' }} hours
-                                {{ ((activity.duration % 3600) / 60) | number:'1.0-0' }} min
-                            </span>
-                            <ng-template #underAnHour>
-                                <span>
-                                    {{ ((activity.duration % 3600) / 60) | number:'1.0-0' }} m
-                                    {{ (activity.duration % 60) | number:'1.0-0' }} sec
-                                </span>
-                            </ng-template>
-                        </div>
-                    </div>
                 </li>
             </ol>
+        </div>
+
+        <!-- Click to see next page -->
+        <div class="activity-footer">
+            <p class="text-muted">Displaying {{ (currentPage - 1) * 10 + 1}} - {{(currentPage * 10)}} of {{ totalActivities }} activities</p>
+            <button (click)="nextPage()" class="next-page-button">Click to see next page</button>
         </div>
     </div>
 
@@ -129,7 +115,7 @@
                         </div>
                         <div class="metric-column">
                             <div class="duration-metric-container">
-                                <small class="text-muted">Duration</small>
+                                <small class="text-muted">Moving Time</small>
                                 <h2 class="metric-value duration">{{expandedActivity.duration | duration}}</h2>
 
                                 <small class="metric-ranking text-muted duration">Resting: {{expandedActivity.restTime /
@@ -167,8 +153,8 @@
 
                     <p #noteContent class="notes-content" [innerHTML]="editableNotes" id="noteContent"></p>
 
-                    <button *ngIf="editingNote" class="edit-note-button btn btn-secondary d-flex align-items-center" type="button"
-                        (click)="saveEditing(noteContent)">
+                    <button *ngIf="editingNote" class="edit-note-button btn btn-secondary d-flex align-items-center"
+                        type="button" (click)="saveEditing(noteContent)">
                         <img src="icons/save-icon.png" alt="Save Icon" class="edit-icon ms-0 me-2">
                         Save
                     </button>

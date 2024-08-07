@@ -55,7 +55,30 @@ app.get('/rides/:num', async (req, res) => {
       }
   
       // Fetch the most recent rides, sorted by a date field (e.g., createdAt) in descending order
-      const rides = await Ride.find().sort({ createdAt: -1 }).limit(num);
+      const rides = await Ride.find().sort({ date: -1 }).limit(num);
+  
+      // Send the fetched rides as a JSON response
+      res.json(rides);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred while fetching rides' });
+    }
+});
+
+/*
+Get the specified number of longest rides
+*/
+app.get('/rides/distance/:num', async (req, res) => {
+    try {
+      // Extract the number of rides to fetch from the request parameters
+      const num = parseInt(req.params.num, 10);
+  
+      if (isNaN(num) || num <= 0) {
+        return res.status(400).json({ error: 'Invalid number of rides requested' });
+      }
+  
+      // Fetch the most recent rides, sorted by a date field (e.g., createdAt) in descending order
+      const rides = await Ride.find().sort({ distance: -1 }).limit(num);
   
       // Send the fetched rides as a JSON response
       res.json(rides);
