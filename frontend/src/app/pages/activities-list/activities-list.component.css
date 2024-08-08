@@ -79,11 +79,11 @@ button {
     width: 30px;
     border-radius: 3px;
 }
-
+/**Activities list */
 
 .activities-list-container {
     background-color: var(--list-color);
-    height: 800px;
+    height: 700px;
     padding: 10px;
     margin-left: 20px;
     margin-right: 20px;
@@ -96,35 +96,14 @@ button {
 
 .list-content {
     overflow-y: scroll;
-    max-height: 565px;
+    max-height: 595px;
     height: 100%;
     box-sizing: border-box;
 }
 
-.activity-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: var(--list-color);
-}
-
-.next-page-button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.next-page-button:hover {
-    background-color: #0056b3;
-}
-
-
 .list-group-item {
     cursor: pointer;
+    height: 66.1px;
 }
 
 .list-group-item.expanded {
@@ -155,7 +134,64 @@ button {
     padding-right: 10px;
     font-weight: bold;
 }
+/**End of Activities list */
 
+/**List footer **/
+
+.activity-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    margin-bottom: -10px;
+    background-color: var(--list-color);
+}
+.activity-footer p{
+    font-size: smaller;
+}
+
+.next-page-button {
+    padding: 0px 10px 2px 10px;
+    font-size: smaller;
+    background-color: transparent;
+    color: var(--bs-secondary-color);
+    border: none; 
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.previous-page-button {
+    padding: 0px 10px 2px 10px;
+    font-size: smaller;
+    background-color: transparent;
+    color: var(--bs-secondary-color);
+    border: none; 
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.placeholder-page-button {
+    padding: 0px 4px 2px 10px;
+    font-size: smaller;
+    background-color: transparent;
+    color: transparent;
+    border: none; 
+    border-radius: 5px;
+    cursor: default;
+}
+
+
+.next-page-button:hover {
+   
+    color: #f899f4c2;
+}
+
+.previous-page-button:hover {
+    color: #f899f4c2;
+}
+
+/**End List footer **/
 
 /*******MAP AND INFO*********/
 
@@ -206,7 +242,7 @@ button {
 }
 .notes-content {
     height: 80%;
-    max-height: 210px;
+    max-height: 195px;
     width: 95%;
     padding: 5px;
     background-color: none;

@@ -26,7 +26,7 @@ export class ActivitiesListComponent implements OnInit {
   editableNotes: string = '';
   totalActivities = 0;
   currentPage = 1;
-  activitiesPerPage = 10;
+  activitiesPerPage = 9;
 
   constructor(private activitiesService: ActivitiesService, @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2) { }
 
@@ -45,6 +45,7 @@ export class ActivitiesListComponent implements OnInit {
     }
   }
 
+  /**Footer section */
   displayPage(page: number): void {
     this.currentPage = page;
     const startIndex = (page - 1) * this.activitiesPerPage;
@@ -55,12 +56,36 @@ export class ActivitiesListComponent implements OnInit {
   nextPage(): void {
     if ((this.currentPage * this.activitiesPerPage) < this.totalActivities) {
       this.displayPage(this.currentPage + 1);
+      this.resetHighlightColor();
     }
   }
 
+  previousPage(): void {
+    if (this.currentPage !== 1) {
+      this.displayPage(this.currentPage - 1);
+      this.resetHighlightColor();
+    }
+  }
+
+  getEndIndex(): number {
+    return Math.min(this.currentPage * this.activitiesPerPage, this.totalActivities);
+  }
+
+  private resetHighlightColor(): void {
+    this.expandedActivityIndex = null;
+  }
+  /**End of Footer Section */
+
   toggleActivity(index: number): void {
     if (this.expandedActivityIndex === index) {
-      this.expandedActivityIndex = null;
+      this.collapseActivity();
+    } else {
+      this.expandActivity(index);
+    }
+  }
+
+  private collapseActivity(): void {
+    this.expandedActivityIndex = null;
       this.expandedActivity = null;
       this.editableNotes = "";
       const noteContent = document.getElementById("noteContent");
@@ -69,8 +94,10 @@ export class ActivitiesListComponent implements OnInit {
       }
       this.clearPolylines();
       this.clearMarkers();
-    } else {
-      this.expandedActivityIndex = index;
+  }
+
+  private expandActivity(index: number): void {
+    this.expandedActivityIndex = index;
       this.expandedActivity = this.displayedActivities[this.expandedActivityIndex];
       if (this.expandedActivity.notes !== "") {
         this.editableNotes = this.expandedActivity.notes;
@@ -84,7 +111,6 @@ export class ActivitiesListComponent implements OnInit {
       this.clearPolylines();
       this.clearMarkers();
       this.addPolyline(index);
-    }
   }
 
   private loadLeaflet(): Promise<any> {
@@ -124,7 +150,7 @@ export class ActivitiesListComponent implements OnInit {
   private addPolyline(index: number): void {
     if (!isPlatformBrowser(this.platformId) || !this.map) return;
 
-    const activity = this.activities[index];
+    const activity = this.displayedActivities[index];
     const encodedPolyline = activity.mapData.summary_polyline;
 
     if (!encodedPolyline) return;
@@ -162,7 +188,11 @@ export class ActivitiesListComponent implements OnInit {
 
     this.markers.push(startMarker, endMarker);
 
-    this.map.fitBounds(polyline.getBounds());
+    const bounds = polyline.getBounds();
+    const padding = 0.2; // 20% padding
+    this.map.fitBounds(bounds, {
+      padding: [this.map.getSize().x * padding, this.map.getSize().y * padding]
+    });
   }
 
   ////////////////////////////////////

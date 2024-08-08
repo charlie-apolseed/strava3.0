@@ -51,8 +51,7 @@
                             {{ activity.date | date: 'MMMM d, yyyy \'at\' h:mm a' }}
                         </div>
                     </div>
-                    <div class="distance-box"
-                        [style.backgroundColor]="getColorForDistance(activity.distance)">
+                    <div class="distance-box" [style.backgroundColor]="getColorForDistance(activity.distance)">
                         {{ activity.distance / 1000 | number:'1.1-1' }} km
                     </div>
                 </li>
@@ -61,8 +60,12 @@
 
         <!-- Click to see next page -->
         <div class="activity-footer">
-            <p class="text-muted">Displaying {{ (currentPage - 1) * 10 + 1}} - {{(currentPage * 10)}} of {{ totalActivities }} activities</p>
-            <button (click)="nextPage()" class="next-page-button">Click to see next page</button>
+            <button (click)="previousPage()" *ngIf="currentPage > 1" class="previous-page-button">&#60;</button>
+            <button *ngIf="currentPage === 1" class="placeholder-page-button" style="display: hidden;">&#60;</button>
+            <p class="text-muted mb-0">{{ (currentPage - 1) * activitiesPerPage + 1 }} - {{ getEndIndex() }} of {{
+                totalActivities }}</p>
+            <button (click)="nextPage()" *ngIf="totalActivities > currentPage * activitiesPerPage"
+                class="next-page-button">&#62;</button>
         </div>
     </div>
 
