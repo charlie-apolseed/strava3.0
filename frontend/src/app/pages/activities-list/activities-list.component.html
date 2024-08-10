@@ -32,13 +32,12 @@
                 <i class="fas fa-search position-absolute"></i>
                 <input type="text" class="form-control" placeholder="Search activities">
             </div>
-            <button class="btn btn-secondary d-flex align-items-center justify-content-between px-3 me-2" type="button"
-                (click)="displayFilterInfo()">
+            <button class="btn btn-secondary d-flex align-items-center justify-content-between px-3 me-2 filter-button"
+                data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="displayFilterInfo()">
                 <img src="icons/filter-icon.png" alt="Filter Logo" class="filter-icon me-2">
                 Filter
             </button>
         </div>
-
         <!-- Activities list -->
         <div class="list-content">
             <ol class="list-group">
@@ -220,6 +219,75 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Filter Activities</h1>
+                <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">X</button>
+            </div>
+
+
+            <div class="modal-body">
+                <div class="distance-filter-field">
+                    <div class="filter-field-title">
+                        Distance
+                    </div>
+                    <div class="filter-field-distance-content">
+                        <div class="distance-slider mt-2 mb-5" *ngIf="isBrowser">
+                            <ngx-slider [(value)]="minDistanceValue" [(highValue)]="maxDistanceValue"
+                                [options]="distanceOptions">
+                            </ngx-slider>
+                            <div class="slider-values d-flex justify-content-between">
+                                <label>
+                                    Min: &nbsp;
+                                    <input type="number" [(ngModel)]="minDistanceValue" [min]="distanceOptions.floor || 0"
+                                        [max]="maxDistanceValue || 400" /> 
+                                </label>
+                                <label>
+                                    Max: &nbsp;
+                                    <input type="number" [(ngModel)]="maxDistanceValue" [min]="minDistanceValue"
+                                        [max]="distanceOptions.ceil || 400" /> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="elevation-filter-field">
+                    <div class="filter-field-title">
+                        Elevation
+                    </div>
+                    <div class="filter-field-elevation-content">
+                        <div class="elevation-slider" *ngIf="isBrowser">
+                            <ngx-slider [(value)]="minElevationValue" [(highValue)]="maxElevationValue"
+                                [options]="elevationOptions">
+                            </ngx-slider>
+                            <div class="slider-values d-flex justify-content-between align-items-center mt-2">
+                                <label>
+                                    Min: &nbsp;
+                                    <input type="number" [(ngModel)]="minElevationValue" [min]="elevationOptions.floor || 0"
+                                        [max]="maxElevationValue || 4000" /> 
+                                </label>
+                                <label>
+                                    Max: &nbsp;
+                                    <input type="number" [(ngModel)]="maxElevationValue" [min]="minElevationValue"
+                                        [max]="elevationOptions.ceil || 4000" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
         </div>
     </div>
 </div>

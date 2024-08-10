@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { ActivitiesListComponent } from './pages/activities-list/activities-list.component';
 import { DurationPipe } from './pipes/duration.pipe';
+
+
 // Import other components and services here
 
 @NgModule({

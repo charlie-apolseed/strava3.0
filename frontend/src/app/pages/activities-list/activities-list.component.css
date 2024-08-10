@@ -4,10 +4,7 @@
     color: rgb(255, 0, 255);
 }
 
-button {
-    background-color: black;
-    color: white;
-}
+
 
 .activity-search {
     outline: none;
@@ -74,11 +71,17 @@ button {
 }
 
 
+.filter-button {
+    background-color: black;
+    color: white;
+}
+
 .filter-icon {
     height: 30px;
     width: 30px;
     border-radius: 3px;
 }
+
 /**Activities list */
 
 .activities-list-container {
@@ -115,7 +118,8 @@ button {
     font-weight: bold;
     width: 300px;
     overflow: hidden;
-    white-space: nowrap; /* Prevent text from wrapping */
+    white-space: nowrap;
+    /* Prevent text from wrapping */
     text-overflow: ellipsis;
 }
 
@@ -134,6 +138,7 @@ button {
     padding-right: 10px;
     font-weight: bold;
 }
+
 /**End of Activities list */
 
 /**List footer **/
@@ -146,7 +151,8 @@ button {
     margin-bottom: -10px;
     background-color: var(--list-color);
 }
-.activity-footer p{
+
+.activity-footer p {
     font-size: smaller;
 }
 
@@ -155,7 +161,7 @@ button {
     font-size: smaller;
     background-color: transparent;
     color: var(--bs-secondary-color);
-    border: none; 
+    border: none;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -165,7 +171,7 @@ button {
     font-size: smaller;
     background-color: transparent;
     color: var(--bs-secondary-color);
-    border: none; 
+    border: none;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -176,14 +182,14 @@ button {
     font-size: smaller;
     background-color: transparent;
     color: transparent;
-    border: none; 
+    border: none;
     border-radius: 5px;
     cursor: default;
 }
 
 
 .next-page-button:hover {
-   
+
     color: #f899f4c2;
 }
 
@@ -216,30 +222,36 @@ button {
 
 .metric-value {
     font-size: 2rem;
-    font-weight: bold; 
+    font-weight: bold;
     margin-bottom: 5px;
 }
 
 .metric-value .unit {
-    font-size: 0.6em; /* Make the unit smaller */
-    font-weight: normal; /* Normal weight for the unit text */
-    vertical-align: middle; /* Aligns the unit with the number */
-    margin-left: 0.2em; /* Small space between the number and the unit */
+    font-size: 0.6em;
+    /* Make the unit smaller */
+    font-weight: normal;
+    /* Normal weight for the unit text */
+    vertical-align: middle;
+    /* Aligns the unit with the number */
+    margin-left: 0.2em;
+    /* Small space between the number and the unit */
 }
 
-.metrics-label{
+.metrics-label {
     font-weight: 600;
     font-size: 150%;
     margin-bottom: 0;
     overflow: hidden;
-    white-space: nowrap; /* Prevent text from wrapping */
+    white-space: nowrap;
+    /* Prevent text from wrapping */
     text-overflow: ellipsis;
 }
 
-.notes-label{
+.notes-label {
     font-weight: 600;
     font-size: 150%;
 }
+
 .notes-content {
     height: 80%;
     max-height: 195px;
@@ -249,10 +261,12 @@ button {
     border-radius: 5px;
     word-wrap: break-word;
     overflow-y: scroll;
-    white-space: normal; 
+    white-space: normal;
 }
 
-.edit-note-button{
+.edit-note-button {
+    background-color: black;
+    color: white;
     height: 30px;
 }
 
@@ -260,3 +274,120 @@ button {
     height: 17px;
     width: 17px;
 }
+
+/**Filter Modal */
+.modal .modal-title {
+    font-weight: 800;
+    color: #3d4246;
+}
+
+.modal .close-btn {
+    background-color: transparent;
+    color: #3d4246;
+    border: none;
+    font-weight: bold;
+    width: 50px;
+    height: 40px;
+    margin-right: -10px;
+}
+
+.modal .close-btn:hover {
+    color: #f899f4c2;
+}
+
+.modal .filter-field-title {
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #3d4246;
+}
+
+.modal .filter-field-distance-content {
+    height: 100px;
+}
+
+.modal .filter-field-elevation-content {
+    height: 100px;
+}
+
+/*Sliders */
+
+.elevation-slider .ngx-slider .ngx-slider-pointer-min{
+    background-color: rgb(255, 149, 255);
+}
+
+.elevation-slider .ngx-slider .ngx-slider-pointer-max{
+    background-color: rgb(255, 149, 255);
+}
+
+.elevation-slider .ngx-slider .ngx-slider-bar{
+    background-color: rgb(176, 176, 176);
+}
+
+.elevation-slider .ngx-slider .ngx-slider-selection{
+    background-color: rgb(255, 201, 255);
+}
+
+.distance-slider .ngx-slider .ngx-slider-pointer-min{
+    background-color: rgb(255, 149, 255);
+}
+
+.distance-slider .ngx-slider .ngx-slider-pointer-max{
+    background-color: rgb(255, 149, 255);
+}
+
+.distance-slider .ngx-slider .ngx-slider-bar{
+    background-color: rgb(176, 176, 176);
+}
+
+.distance-slider .ngx-slider .ngx-slider-selection{
+    background-color: rgb(255, 201, 255);
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.slider-values{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.slider-values label {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #55637d;;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.slider-values input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    margin-left: 0px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #55637d;;
+    background-color: #f9f9f9;
+    text-align: right;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slider-values input[type="number"]:focus {
+    border-color: #f899f4;
+    outline: none;
+    box-shadow: 0 0 5px rgba(248, 153, 244, 0.5);
+}
+
+
+

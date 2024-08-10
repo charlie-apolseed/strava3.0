@@ -1,19 +1,23 @@
-import { Component, OnInit, Inject, PLATFORM_ID, Renderer2, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, Renderer2, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import Activity from '../../models/activity';
 import { ActivitiesService } from '../../activities.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { FormsModule } from '@angular/forms'; 
 import { decode } from '@googlemaps/polyline-codec';
 import { DurationPipe } from '../../pipes/duration.pipe';
+import { LabelType, NgxSliderModule, Options } from '@angular-slider/ngx-slider';
 
 @Component({
   selector: 'app-activities-list',
   standalone: true,
-  imports: [CommonModule, DurationPipe],
+  imports: [CommonModule, DurationPipe, NgxSliderModule, FormsModule],
   templateUrl: './activities-list.component.html',
-  styleUrls: ['./activities-list.component.css']
+  styleUrls: ['./activities-list.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ActivitiesListComponent implements OnInit {
   @ViewChild('noteContent') noteContent!: ElementRef;
+  isBrowser: boolean;
   displayedActivities: Activity[] = [];
   activities: Activity[] = [];
   showFilter = false;
@@ -28,7 +32,74 @@ export class ActivitiesListComponent implements OnInit {
   currentPage = 1;
   activitiesPerPage = 9;
 
-  constructor(private activitiesService: ActivitiesService, @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2) { }
+
+  ///////////////// SLIDER DATA
+  minDistanceValue: number = 50;
+  maxDistanceValue: number = 150;
+  distanceOptions: Options = {
+    floor: 0,
+    ceil: 400,
+    step: 1, // Optional: step size for the slider
+    noSwitching: true, // Optional: prevent minValue and maxValue from swapping
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          if (this.minDistanceValue < 37) {
+            return value + " km"
+          } else {
+            return "" + value;
+          }
+        case LabelType.High:
+          if (this.maxDistanceValue == 400) {
+            return value + "+ km";
+          } else if (this.maxDistanceValue > 340) {
+            return value + " km"
+          } else {
+            return value + ""
+          }
+        case LabelType.Ceil:
+          return value + " km";
+        default:
+          return value + " km";
+      }
+    }
+  };
+
+  minElevationValue: number = 100;
+  maxElevationValue: number = 1000;
+  elevationOptions: Options = {
+    floor: 0,
+    ceil: 4000,
+    step: 20, // Optional: step size for the slider
+    noSwitching: true, // Optional: prevent minValue and maxValue from swapping
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          if (this.minElevationValue < 360) {
+            return value + " m"
+          } else {
+            return "" + value;
+          }
+        case LabelType.High:
+          if (this.maxElevationValue == 4000){
+            return value + "+ m";
+          } else if (this.maxElevationValue > 3340) {
+            return value + " m"
+          }
+          return "" + value;
+        case LabelType.Ceil:
+          return value + " m";
+        default:
+          return value + " m";
+      }
+    }
+  };
+  /////////////////
+
+  constructor(private activitiesService: ActivitiesService, @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
+
 
   ngOnInit(): void {
     this.activitiesService.getAllActivities().subscribe(activities => {
@@ -86,31 +157,31 @@ export class ActivitiesListComponent implements OnInit {
 
   private collapseActivity(): void {
     this.expandedActivityIndex = null;
-      this.expandedActivity = null;
-      this.editableNotes = "";
-      const noteContent = document.getElementById("noteContent");
-      if (noteContent != null) {
-        this.cancelEditing(noteContent);
-      }
-      this.clearPolylines();
-      this.clearMarkers();
+    this.expandedActivity = null;
+    this.editableNotes = "";
+    const noteContent = document.getElementById("noteContent");
+    if (noteContent != null) {
+      this.cancelEditing(noteContent);
+    }
+    this.clearPolylines();
+    this.clearMarkers();
   }
 
   private expandActivity(index: number): void {
     this.expandedActivityIndex = index;
-      this.expandedActivity = this.displayedActivities[this.expandedActivityIndex];
-      if (this.expandedActivity.notes !== "") {
-        this.editableNotes = this.expandedActivity.notes;
-      } else {
-        this.editableNotes = "Add your activity notes here";
-      }
-      const noteContent = document.getElementById("notesContent");
-      if (noteContent != null) {
-        this.cancelEditing(noteContent);
-      }
-      this.clearPolylines();
-      this.clearMarkers();
-      this.addPolyline(index);
+    this.expandedActivity = this.displayedActivities[this.expandedActivityIndex];
+    if (this.expandedActivity.notes !== "") {
+      this.editableNotes = this.expandedActivity.notes;
+    } else {
+      this.editableNotes = "Add your activity notes here";
+    }
+    const noteContent = document.getElementById("notesContent");
+    if (noteContent != null) {
+      this.cancelEditing(noteContent);
+    }
+    this.clearPolylines();
+    this.clearMarkers();
+    this.addPolyline(index);
   }
 
   private loadLeaflet(): Promise<any> {
@@ -234,7 +305,7 @@ export class ActivitiesListComponent implements OnInit {
     }
   }
 
-  
+
 
   ////////////////////////////////////
   /*Logic for displaying filter info*/
