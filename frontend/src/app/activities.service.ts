@@ -22,11 +22,12 @@ export class ActivitiesService {
 
   /** Used for uploading recent activities not currently in database */
   uploadActivitiesToDatabase() {
+    console.log("activities-service: updating");
     return this.webService.post('rides/update', {});
   }
 
   /**Used for reseting database to match all activities in strava */
-  uploadAllActivitiesToDatabase() {
+  reuploadAllActivitiesToDatabase() {
     return this.webService.post('rides', {})
   }
 
@@ -37,5 +38,9 @@ export class ActivitiesService {
 
   updateActivityNotes(title: string, date: string, notes: string) {
     return this.webService.patch(`rides/notes/${title}/${date}`, { notes });
+  }
+
+  toggleActivityFavorite(title: string, date: string, favorite: boolean) {
+    return this.webService.patch(`rides/favorite/${title}/${date}`, { favorite });
   }
 }

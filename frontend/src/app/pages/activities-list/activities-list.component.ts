@@ -2,10 +2,11 @@ import { Component, OnInit, Inject, PLATFORM_ID, Renderer2, ElementRef, ViewChil
 import Activity from '../../models/activity';
 import { ActivitiesService } from '../../activities.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { decode } from '@googlemaps/polyline-codec';
 import { DurationPipe } from '../../pipes/duration.pipe';
 import { LabelType, NgxSliderModule, Options } from '@angular-slider/ngx-slider';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-activities-list',
@@ -17,8 +18,10 @@ import { LabelType, NgxSliderModule, Options } from '@angular-slider/ngx-slider'
 })
 export class ActivitiesListComponent implements OnInit {
   @ViewChild('noteContent') noteContent!: ElementRef;
+  @ViewChild('closeBtn') closeBtn!: ElementRef;
   isBrowser: boolean;
   displayedActivities: Activity[] = [];
+  filteredActivities: Activity[] = [];
   activities: Activity[] = [];
   showFilter = false;
   private map!: L.Map;
@@ -32,8 +35,80 @@ export class ActivitiesListComponent implements OnInit {
   currentPage = 1;
   activitiesPerPage = 9;
 
+  minHrFilter = 125;
+  maxHrFilter = 145;
+  minDistanceFilter = 50;
+  maxDistanceFilter = 150;
+  minElevationFilter = 100;
+  maxElevationFilter = 1000;
 
-  ///////////////// SLIDER DATA
+
+
+
+
+  ///////////////// SLIDER and FILTER 
+  displayFilter(): void {
+    if (this.maxDistanceFilter > 400) {
+      this.maxDistanceValue = 400;
+    } else {
+      this.maxDistanceValue = this.maxDistanceFilter
+    }
+    this.minDistanceValue = this.minDistanceFilter
+    if (this.maxElevationFilter > 4000) {
+      this.maxElevationValue = 4000;
+    } else {
+      this.maxElevationValue = this.maxElevationFilter
+    }
+    this.minElevationValue = this.minElevationFilter
+  }
+
+
+  applyFilter(): void {
+    // Set maxDistanceFilter and minDistanceFilter based on the slider values
+    this.maxDistanceFilter = this.maxDistanceValue === 400 ? 9999 : this.maxDistanceValue;
+    this.minDistanceFilter = this.minDistanceValue;
+
+    // Set maxElevationFilter and minElevationFilter based on the slider values
+    this.maxElevationFilter = this.maxElevationValue === 4000 ? 9999 : this.maxElevationValue;
+    this.minElevationFilter = this.minElevationValue;
+
+    // Set maxHrFilter and minHrFilter based on the slider values
+    this.maxHrFilter = this.maxHrValue === 165 ? 9999 : this.maxHrValue;
+    this.minHrFilter = this.minHrValue;
+
+    // Clear the filteredActivities array
+    this.filteredActivities = [];
+
+    // Loop through each activity and apply all filters
+    for (let idx = 0; idx < this.activities.length; idx++) {
+      const activity = this.activities[idx];
+      console.log(activity);
+
+      // Apply distance and elevation filters
+      if (
+        (this.maxDistanceFilter >= activity.distance / 1000 && this.minDistanceFilter <= activity.distance / 1000) &&
+        (this.maxElevationFilter >= activity.elevation && this.minElevationFilter <= activity.elevation)
+      ) {
+        // Apply heart rate filter (only if avgHeartRate is not null)
+        if (
+          activity.avgHeartRate == null ||
+          (this.maxHrFilter >= activity.avgHeartRate && this.minHrFilter <= activity.avgHeartRate)
+        ) {
+          this.filteredActivities.push(activity);
+        }
+      }
+    }
+
+    // Update displayed activities
+    this.displayedActivities = this.filteredActivities;
+    console.log(this.displayedActivities);
+    this.displayPage(1);
+
+    // Close the modal
+    this.closeBtn.nativeElement.click();
+  }
+
+
   minDistanceValue: number = 50;
   maxDistanceValue: number = 150;
   distanceOptions: Options = {
@@ -81,7 +156,7 @@ export class ActivitiesListComponent implements OnInit {
             return "" + value;
           }
         case LabelType.High:
-          if (this.maxElevationValue == 4000){
+          if (this.maxElevationValue == 4000) {
             return value + "+ m";
           } else if (this.maxElevationValue > 3340) {
             return value + " m"
@@ -94,6 +169,36 @@ export class ActivitiesListComponent implements OnInit {
       }
     }
   };
+
+  minHrValue: number = 125;
+  maxHrValue: number = 145;
+  hrOptions: Options = {
+    floor: 100,
+    ceil: 165,
+    step: 1, // Optional: step size for the slider
+    noSwitching: true, // Optional: prevent minValue and maxValue from swapping
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          if (this.minHrValue < 114) {
+            return value + " bpm";
+          } else {
+            return "" + value;
+          }
+        case LabelType.High:
+          if (this.maxHrValue == 190) {
+            return value + "+ bpm";
+          } else if (this.maxHrValue > 3340) {
+            return value + " bpm";
+          }
+          return "" + value;
+        case LabelType.Ceil:
+          return value + " bpm";
+        default:
+          return value + " bpm";
+      }
+    }
+  };
   /////////////////
 
   constructor(private activitiesService: ActivitiesService, @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2) {
@@ -102,9 +207,23 @@ export class ActivitiesListComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.activitiesService.uploadActivitiesToDatabase().subscribe({
+      next: (response) => {
+        console.log('Update successful', response);
+      },
+      error: (error) => {
+        console.error('Update failed', error);
+        if (error instanceof HttpErrorResponse && error.error instanceof SyntaxError) {
+          console.error('The server returned an invalid JSON:', error.message);
+        } else {
+          console.error('An unexpected error occurred:', error.message);
+        }
+      }
+    });
+
     this.activitiesService.getAllActivities().subscribe(activities => {
       this.activities = activities;
-      this.totalActivities = activities.length;
+      this.filteredActivities = activities;
       this.displayPage(1);
     });
 
@@ -121,11 +240,11 @@ export class ActivitiesListComponent implements OnInit {
     this.currentPage = page;
     const startIndex = (page - 1) * this.activitiesPerPage;
     const endIndex = startIndex + this.activitiesPerPage;
-    this.displayedActivities = this.activities.slice(startIndex, endIndex);
+    this.displayedActivities = this.filteredActivities.slice(startIndex, endIndex);
   }
 
   nextPage(): void {
-    if ((this.currentPage * this.activitiesPerPage) < this.totalActivities) {
+    if ((this.currentPage * this.activitiesPerPage) < this.filteredActivities.length) {
       this.displayPage(this.currentPage + 1);
       this.resetHighlightColor();
     }
@@ -139,7 +258,7 @@ export class ActivitiesListComponent implements OnInit {
   }
 
   getEndIndex(): number {
-    return Math.min(this.currentPage * this.activitiesPerPage, this.totalActivities);
+    return Math.min(this.currentPage * this.activitiesPerPage, this.filteredActivities.length);
   }
 
   private resetHighlightColor(): void {
@@ -305,7 +424,13 @@ export class ActivitiesListComponent implements OnInit {
     }
   }
 
-
+  ///Favoriting an avtivity
+  toggleFavorite(): void {
+    if (this.expandedActivity != null) {
+      this.expandedActivity.favorite = !this.expandedActivity?.favorite
+    } 
+    this.activitiesService.toggleActivityFavorite(this.expandedActivity!.title, this.expandedActivity!.date, this.expandedActivity!.favorite);
+  }
 
   ////////////////////////////////////
   /*Logic for displaying filter info*/

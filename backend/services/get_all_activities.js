@@ -44,6 +44,7 @@ async function getAllActivities() {
                         avgHeartRate: returnedActivity.average_heartrate,
                         maxHeartRate: returnedActivity.max_heartrate,
                         mapData: returnedActivity.map,
+                        favorite: false,
                         notes: "",
                         images: []
                     };

@@ -35,7 +35,7 @@ async function getSpecifiedActivities(page) {
                         date: returnedActivity.start_date_local,
                         duration: returnedActivity.moving_time,
                         restTime: returnedActivity.elapsed_time - returnedActivity.moving_time,
-                        distance: returnedActivity.distance, // Add distance
+                        distance: returnedActivity.distance,
                         avgSpeed: returnedActivity.average_speed,
                         maxSpeed: returnedActivity.max_speed,
                         elevation: returnedActivity.total_elevation_gain,
@@ -43,6 +43,7 @@ async function getSpecifiedActivities(page) {
                         maxHeartRate: returnedActivity.max_heartrate,
                         mapData: returnedActivity.map,
                         notes: "",
+                        favorite: false,
                         images: []
                     }; 
                     allActivities.push(processedActivity);

@@ -103,7 +103,11 @@ app.post('/rides', async (req, res) => {
     res.send("All rides were successfully uploaded to the database.")
 })
 
+/*
+Add rides that are not already in the database
+*/
 app.post('/rides/update', async (req, res) => {
+    console.log("updating rides");
     const getSpecifiedActivities = require('./services/get_specified_activities.js');
     let duplicateDetected = false;
     let page = 1;
@@ -111,7 +115,9 @@ app.post('/rides/update', async (req, res) => {
     try {
         while (!duplicateDetected) {
             const rides = await getSpecifiedActivities(page);
-            if (rides.length === 0) break; // Break loop if no more activities
+            if (rides.length == 0 || rides == null || rides == undefined) {
+                break; // Break loop if no more activities
+            }
 
             for (const ride of rides) {
                 const existingRide = await Ride.findOne({ title: ride.title, date: ride.date });
@@ -147,7 +153,7 @@ app.get('/rides/:title/:date', (req, res) => {
 
 
 /*
-Update a ride 
+Update a ride's notes
 */
 app.patch('/rides/notes/:title/:date', (req, res) => {
     Ride.findOneAndUpdate({ title: req.params.title, date: req.params.date }, {
@@ -155,6 +161,17 @@ app.patch('/rides/notes/:title/:date', (req, res) => {
     }, { new: true })
         .then((ride) => res.send(ride))
         .catch((error) => console.log(error));
+})
+
+/*
+Update a ride's favorite 
+*/
+app.patch('/rides/favorite/:title/:date', (req, res) => {
+    Ride.findOneAndUpdate({ title: req.params.title, date: req.params.date }, {
+        favorite: req.body.favorite
+    }, { new: true })
+    .then((ride) => res.send(ride))
+    .catch((error) => console.log(error));
 })
 
 /*

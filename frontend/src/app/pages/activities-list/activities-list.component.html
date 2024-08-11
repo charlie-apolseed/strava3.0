@@ -28,13 +28,18 @@
     <div class="col-5 activities-list-container">
         <!-- Filter + Search -->
         <div class="filter-items d-flex p-2 align-items-center justify-content-between">
-            <div class="activity-search position-relative">
-                <i class="fas fa-search position-absolute"></i>
-                <input type="text" class="form-control" placeholder="Search activities">
-            </div>
-            <button class="btn btn-secondary d-flex align-items-center justify-content-between px-3 me-2 filter-button"
-                data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="displayFilterInfo()">
-                <img src="icons/filter-icon.png" alt="Filter Logo" class="filter-icon me-2">
+            <button type="button" class="btn btn-dark p-2">
+                Sort
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-sort-down me-1" viewBox="0 0 16 16">
+                    <path
+                        d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z">
+                    </path>
+                </svg>
+            </button>
+            <button class="btn btn-dark d-flex align-items-center justify-content-between px-3 me-2 filter-button"
+                data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="displayFilter()">
+                <img src="icons/filter-icon.png" alt="Filter Icon" class="filter-icon me-2">
                 Filter
             </button>
         </div>
@@ -44,10 +49,15 @@
                 <li *ngFor="let activity of displayedActivities; let i = index"
                     class="list-group-item d-flex justify-content-between align-items-center"
                     [class.expanded]="expandedActivityIndex === i" (click)="toggleActivity(i)">
-                    <div class="ms-2">
-                        <div class="fw-bold activity-title">{{ activity.title }}</div>
-                        <div class="activity-date text-muted">
-                            {{ activity.date | date: 'MMMM d, yyyy \'at\' h:mm a' }}
+                    <div class="ms-1 d-flex">
+                        <div style="width: 30px; margin-right: 10px;">
+                            <img *ngIf="activity.favorite" src="icons/filled-star-icon.png" alt="filled-star-icon" class="list-filled-star-icon">
+                        </div>
+                        <div class="title-and-date ms-1">
+                            <div class="fw-bold activity-title">{{ activity.title }}</div>
+                            <div class="activity-date text-muted">
+                                {{ activity.date | date: 'MMMM d, yyyy \'at\' h:mm a' }}
+                            </div>
                         </div>
                     </div>
                     <div class="distance-box" [style.backgroundColor]="getColorForDistance(activity.distance)">
@@ -60,23 +70,35 @@
         <!-- Click to see next page -->
         <div class="activity-footer">
             <button (click)="previousPage()" *ngIf="currentPage > 1" class="previous-page-button">&#60;</button>
-            <button *ngIf="currentPage === 1" class="placeholder-page-button" style="display: hidden;">&#60;</button>
+            <button *ngIf="currentPage === 1" class="placeholder-page-button"
+                style="display: hidden; cursor: default;">&#60;</button>
             <p class="text-muted mb-0">{{ (currentPage - 1) * activitiesPerPage + 1 }} - {{ getEndIndex() }} of {{
-                totalActivities }}</p>
-            <button (click)="nextPage()" *ngIf="totalActivities > currentPage * activitiesPerPage"
+                filteredActivities.length }}</p>
+            <button (click)="nextPage()" *ngIf="filteredActivities.length > currentPage * activitiesPerPage"
                 class="next-page-button">&#62;</button>
         </div>
     </div>
 
     <!-- Map -->
     <div class="col map-and-info-container pe-4">
-        <div class="map-container">
+        <div *ngIf="expandedActivity == null  || expandedActivity.images != []" class="map-container">
+
             <div id="map"></div>
+
+
         </div>
         <div *ngIf="expandedActivityIndex !== null && expandedActivity !== null" class="info-container">
             <div class="d-flex">
                 <div class="col-7 metric-grid">
-                    <h2 class="metrics-label mb-3">{{expandedActivity.title}}</h2>
+                    <div class="title-and-favorite-icon d-flex justify-content-between">
+                        <h2 class="metrics-label mb-3">{{expandedActivity.title}}</h2>
+                        <button *ngIf="expandedActivity.favorite" class="favorite-button"
+                            (click)="toggleFavorite()"><img src="/icons/filled-star-icon.png" class="star-icon-metrics"
+                                alt="favorite-icon"></button>
+                        <button *ngIf="!expandedActivity.favorite" class="favorite-button"
+                            (click)="toggleFavorite()"><img src="/icons/empty-star-icon.png" class="star-icon-metrics"
+                                alt="favorite-icon"></button>
+                    </div>
                     <div class="d-flex justify-content-between metric-row">
                         <div class="metric-column">
                             <div class="distance-metric-container">
@@ -245,13 +267,13 @@
                             <div class="slider-values d-flex justify-content-between">
                                 <label>
                                     Min: &nbsp;
-                                    <input type="number" [(ngModel)]="minDistanceValue" [min]="distanceOptions.floor || 0"
-                                        [max]="maxDistanceValue || 400" /> 
+                                    <input type="number" [(ngModel)]="minDistanceValue"
+                                        [min]="distanceOptions.floor || 0" [max]="maxDistanceValue || 400" />
                                 </label>
                                 <label>
                                     Max: &nbsp;
                                     <input type="number" [(ngModel)]="maxDistanceValue" [min]="minDistanceValue"
-                                        [max]="distanceOptions.ceil || 400" /> 
+                                        [max]="distanceOptions.ceil || 400" />
                                 </label>
                             </div>
                         </div>
@@ -270,8 +292,8 @@
                             <div class="slider-values d-flex justify-content-between align-items-center mt-2">
                                 <label>
                                     Min: &nbsp;
-                                    <input type="number" [(ngModel)]="minElevationValue" [min]="elevationOptions.floor || 0"
-                                        [max]="maxElevationValue || 4000" /> 
+                                    <input type="number" [(ngModel)]="minElevationValue"
+                                        [min]="elevationOptions.floor || 0" [max]="maxElevationValue || 4000" />
                                 </label>
                                 <label>
                                     Max: &nbsp;
@@ -282,11 +304,36 @@
                         </div>
                     </div>
                 </div>
+                <hr>
+                <div class="Hr-filter-field">
+                    <div class="filter-field-title">
+                        Average Heart Rate
+                    </div>
+                    <div class="filter-field-hr-content">
+                        <div class="hr-slider" *ngIf="isBrowser">
+                            <ngx-slider [(value)]="minHrValue" [(highValue)]="maxHrValue" [options]="hrOptions">
+                            </ngx-slider>
+                            <div class="slider-values d-flex justify-content-between align-items-center mt-2">
+                                <label>
+                                    Min: &nbsp;
+                                    <input type="number" [(ngModel)]="minHrValue" [min]="hrOptions.floor || 0"
+                                        [max]="maxHrValue || 4000" />
+                                </label>
+                                <label>
+                                    Max: &nbsp;
+                                    <input type="number" [(ngModel)]="maxHrValue" [min]="minHrValue"
+                                        [max]="hrOptions.ceil || 4000" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button #closeBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary save-changes-button" (click)="applyFilter()">Save
+                    changes</button>
             </div>
         </div>
     </div>
