@@ -47,21 +47,21 @@ Get the specified number of most recent rides
 */
 app.get('/rides/:num', async (req, res) => {
     try {
-      // Extract the number of rides to fetch from the request parameters
-      const num = parseInt(req.params.num, 10);
-  
-      if (isNaN(num) || num <= 0) {
-        return res.status(400).json({ error: 'Invalid number of rides requested' });
-      }
-  
-      // Fetch the most recent rides, sorted by a date field (e.g., createdAt) in descending order
-      const rides = await Ride.find().sort({ date: -1 }).limit(num);
-  
-      // Send the fetched rides as a JSON response
-      res.json(rides);
+        // Extract the number of rides to fetch from the request parameters
+        const num = parseInt(req.params.num, 10);
+
+        if (isNaN(num) || num <= 0) {
+            return res.status(400).json({ error: 'Invalid number of rides requested' });
+        }
+
+        // Fetch the most recent rides, sorted by a date field (e.g., createdAt) in descending order
+        const rides = await Ride.find().sort({ date: -1 }).limit(num);
+
+        // Send the fetched rides as a JSON response
+        res.json(rides);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'An error occurred while fetching rides' });
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching rides' });
     }
 });
 
@@ -70,21 +70,21 @@ Get the specified number of longest rides
 */
 app.get('/rides/distance/:num', async (req, res) => {
     try {
-      // Extract the number of rides to fetch from the request parameters
-      const num = parseInt(req.params.num, 10);
-  
-      if (isNaN(num) || num <= 0) {
-        return res.status(400).json({ error: 'Invalid number of rides requested' });
-      }
-  
-      // Fetch the most recent rides, sorted by a date field (e.g., createdAt) in descending order
-      const rides = await Ride.find().sort({ distance: -1 }).limit(num);
-  
-      // Send the fetched rides as a JSON response
-      res.json(rides);
+        // Extract the number of rides to fetch from the request parameters
+        const num = parseInt(req.params.num, 10);
+
+        if (isNaN(num) || num <= 0) {
+            return res.status(400).json({ error: 'Invalid number of rides requested' });
+        }
+
+        // Fetch the most recent rides, sorted by a date field (e.g., createdAt) in descending order
+        const rides = await Ride.find().sort({ distance: -1 }).limit(num);
+
+        // Send the fetched rides as a JSON response
+        res.json(rides);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'An error occurred while fetching rides' });
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching rides' });
     }
 });
 
@@ -104,39 +104,31 @@ app.post('/rides', async (req, res) => {
 })
 
 /*
-Add rides that are not already in the database
+Add 20 rides that are not already in the database
 */
 app.post('/rides/update', async (req, res) => {
-    console.log("updating rides");
-    const getSpecifiedActivities = require('./services/get_specified_activities.js');
-    let duplicateDetected = false;
-    let page = 1;
-
+    console.log("Updating rides");
+    const { get50Activities } = require('./services/get_all_activities.js');
+    
     try {
-        while (!duplicateDetected) {
-            const rides = await getSpecifiedActivities(page);
-            if (rides.length == 0 || rides == null || rides == undefined) {
-                break; // Break loop if no more activities
+        const rides = await get50Activities(); // Fetch the 20 most recent rides
+        
+        // Use Promise.all to handle multiple asynchronous operations concurrently
+        await Promise.all(rides.map(async (ride) => {
+            const existingRide = await Ride.findOne({ title: ride.title, date: ride.date });
+            if (!existingRide) {
+                await new Ride(ride).save();
+                console.log(`${ride.title} was saved.`);
+            } else {
+                console.log(`${ride.title} already exists in the database.`); 
             }
+        }));
 
-            for (const ride of rides) {
-                const existingRide = await Ride.findOne({ title: ride.title, date: ride.date });
-                if (!existingRide) {
-                    await new Ride(ride).save();
-                    console.log(`${ride.title} was saved.`);
-                } else {
-                    console.log(`${ride.title} already exists in the database!`);
-                    duplicateDetected = true;
-                    break; // Break out of the for loop
-                }
-            }
-            page += 1;
-        }
         res.send('Update process completed.');
     } catch (error) {
         console.error('Error updating rides:', error);
         if (!res.headersSent) {
-            res.status(500).send('An error occurred during the update process.');
+            res.status(500).send('An error occurred during the update process: ' + error.message);
         }
     }
 });
@@ -170,8 +162,8 @@ app.patch('/rides/favorite/:title/:date', (req, res) => {
     Ride.findOneAndUpdate({ title: req.params.title, date: req.params.date }, {
         favorite: req.body.favorite
     }, { new: true })
-    .then((ride) => res.send(ride))
-    .catch((error) => console.log(error));
+        .then((ride) => res.send(ride))
+        .catch((error) => console.log(error));
 })
 
 /*
