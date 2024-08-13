@@ -109,10 +109,10 @@ Add 20 rides that are not already in the database
 app.post('/rides/update', async (req, res) => {
     console.log("Updating rides");
     const { get50Activities } = require('./services/get_all_activities.js');
-    
+
     try {
         const rides = await get50Activities(); // Fetch the 20 most recent rides
-        
+
         // Use Promise.all to handle multiple asynchronous operations concurrently
         await Promise.all(rides.map(async (ride) => {
             const existingRide = await Ride.findOne({ title: ride.title, date: ride.date });
@@ -120,15 +120,15 @@ app.post('/rides/update', async (req, res) => {
                 await new Ride(ride).save();
                 console.log(`${ride.title} was saved.`);
             } else {
-                console.log(`${ride.title} already exists in the database.`); 
+                console.log(`${ride.title} already exists in the database.`);
             }
         }));
 
-        res.send('Update process completed.');
+        res.json({ message: 'Update process completed.' });
     } catch (error) {
         console.error('Error updating rides:', error);
         if (!res.headersSent) {
-            res.status(500).send('An error occurred during the update process: ' + error.message);
+            res.status(500).json({ error: 'An error occurred during the update process.', details: error.message });
         }
     }
 });

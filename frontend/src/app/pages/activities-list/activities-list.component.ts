@@ -42,6 +42,14 @@ export class ActivitiesListComponent implements OnInit {
   minElevationFilter = 100;
   maxElevationFilter = 1000;
 
+  //Temporary Holders
+  tempDistanceChecked: boolean = true;
+  tempElevationChecked: boolean = true;
+  tempHrChecked: boolean = true;
+
+  distanceChecked: boolean = true;
+  elevationChecked: boolean = true;
+  hrChecked: boolean = true;
 
 
 
@@ -64,18 +72,24 @@ export class ActivitiesListComponent implements OnInit {
 
 
   applyFilter(): void {
+    this.distanceChecked = this.tempDistanceChecked;
+    this.elevationChecked = this.tempElevationChecked;
+    this.hrChecked = this.tempHrChecked;
     // Set maxDistanceFilter and minDistanceFilter based on the slider values
-    this.maxDistanceFilter = this.maxDistanceValue === 400 ? 9999 : this.maxDistanceValue;
-    this.minDistanceFilter = this.minDistanceValue;
+    if (this.distanceChecked) {
+      this.maxDistanceFilter = this.maxDistanceValue === 400 ? 9999 : this.maxDistanceValue;
+      this.minDistanceFilter = this.minDistanceValue;
+    }
 
-    // Set maxElevationFilter and minElevationFilter based on the slider values
-    this.maxElevationFilter = this.maxElevationValue === 4000 ? 9999 : this.maxElevationValue;
-    this.minElevationFilter = this.minElevationValue;
+    if (this.elevationChecked) {
+      this.maxElevationFilter = this.maxElevationValue === 4000 ? 9999 : this.maxElevationValue;
+      this.minElevationFilter = this.minElevationValue;
+    }
 
-    // Set maxHrFilter and minHrFilter based on the slider values
-    this.maxHrFilter = this.maxHrValue === 165 ? 9999 : this.maxHrValue;
-    this.minHrFilter = this.minHrValue;
-
+    if (this.hrChecked) {
+      this.maxHrFilter = this.maxHrValue === 165 ? 9999 : this.maxHrValue;
+      this.minHrFilter = this.minHrValue;
+    }
     // Clear the filteredActivities array
     this.filteredActivities = [];
 
@@ -84,20 +98,28 @@ export class ActivitiesListComponent implements OnInit {
       const activity = this.activities[idx];
       console.log(activity);
 
-      // Apply distance and elevation filters
-      if (
-        (this.maxDistanceFilter >= activity.distance / 1000 && this.minDistanceFilter <= activity.distance / 1000) &&
-        (this.maxElevationFilter >= activity.elevation && this.minElevationFilter <= activity.elevation)
-      ) {
-        // Apply heart rate filter (only if avgHeartRate is not null)
-        if (
-          activity.avgHeartRate == null ||
-          (this.maxHrFilter >= activity.avgHeartRate && this.minHrFilter <= activity.avgHeartRate)
-        ) {
-          this.filteredActivities.push(activity);
+      if (this.distanceChecked) {
+        if (!(this.maxDistanceFilter >= activity.distance / 1000 && this.minDistanceFilter <= activity.distance / 1000)) {
+          continue;
         }
       }
+
+      if (this.elevationChecked) {
+        if (!(this.maxElevationFilter >= activity.elevation && this.minElevationFilter <= activity.elevation)) {
+          continue;
+        }
+      }
+
+      if (this.hrChecked) {
+        if (!(this.maxHrFilter >= activity.avgHeartRate && this.minHrFilter <= activity.avgHeartRate)) {
+          continue;
+        }
+      }
+
+      this.filteredActivities.push(activity);
+
     }
+
 
     // Update displayed activities
     this.displayedActivities = this.filteredActivities;
@@ -107,6 +129,7 @@ export class ActivitiesListComponent implements OnInit {
     // Close the modal
     this.closeBtn.nativeElement.click();
   }
+
 
 
   minDistanceValue: number = 50;
@@ -145,7 +168,7 @@ export class ActivitiesListComponent implements OnInit {
   elevationOptions: Options = {
     floor: 0,
     ceil: 4000,
-    step: 20, // Optional: step size for the slider
+    step: 1, // Optional: step size for the slider
     noSwitching: true, // Optional: prevent minValue and maxValue from swapping
     translate: (value: number, label: LabelType): string => {
       switch (label) {
@@ -173,14 +196,14 @@ export class ActivitiesListComponent implements OnInit {
   minHrValue: number = 125;
   maxHrValue: number = 145;
   hrOptions: Options = {
-    floor: 100,
+    floor: 90,
     ceil: 165,
     step: 1, // Optional: step size for the slider
     noSwitching: true, // Optional: prevent minValue and maxValue from swapping
     translate: (value: number, label: LabelType): string => {
       switch (label) {
         case LabelType.Low:
-          if (this.minHrValue < 114) {
+          if (this.minHrValue < 104) {
             return value + " bpm";
           } else {
             return "" + value;
@@ -428,7 +451,7 @@ export class ActivitiesListComponent implements OnInit {
   toggleFavorite(): void {
     if (this.expandedActivity != null) {
       this.expandedActivity.favorite = !this.expandedActivity?.favorite
-    } 
+    }
     this.activitiesService.toggleActivityFavorite(this.expandedActivity!.title, this.expandedActivity!.date, this.expandedActivity!.favorite);
   }
 

@@ -51,7 +51,8 @@
                     [class.expanded]="expandedActivityIndex === i" (click)="toggleActivity(i)">
                     <div class="ms-1 d-flex">
                         <div style="width: 30px; margin-right: 10px;">
-                            <img *ngIf="activity.favorite" src="icons/filled-star-icon.png" alt="filled-star-icon" class="list-filled-star-icon">
+                            <img *ngIf="activity.favorite" src="icons/filled-star-icon.png" alt="filled-star-icon"
+                                class="list-filled-star-icon">
                         </div>
                         <div class="title-and-date ms-1">
                             <div class="fw-bold activity-title">{{ activity.title }}</div>
@@ -256,8 +257,14 @@
 
             <div class="modal-body">
                 <div class="distance-filter-field">
-                    <div class="filter-field-title">
-                        Distance
+                    <div class="filter-field-header d-flex justify-content-between">
+                        <div class="filter-field-title">
+                            Distance
+                        </div>
+                        <div class="form-check distance-check">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="tempDistanceChecked"
+                                id="flexCheckDefaultDistance" />
+                        </div>
                     </div>
                     <div class="filter-field-distance-content">
                         <div class="distance-slider mt-2 mb-5" *ngIf="isBrowser">
@@ -281,8 +288,14 @@
                 </div>
                 <hr>
                 <div class="elevation-filter-field">
-                    <div class="filter-field-title">
-                        Elevation
+                    <div class="filter-field-header d-flex justify-content-between">
+                        <div class="filter-field-title">
+                            Elevation
+                        </div>
+                        <div class="form-check elevation-check">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="tempElevationChecked"
+                                id="flexCheckDefaultElevation" />
+                        </div>
                     </div>
                     <div class="filter-field-elevation-content">
                         <div class="elevation-slider" *ngIf="isBrowser">
@@ -298,7 +311,7 @@
                                 <label>
                                     Max: &nbsp;
                                     <input type="number" [(ngModel)]="maxElevationValue" [min]="minElevationValue"
-                                        [max]="elevationOptions.ceil || 4000" />
+                                        [max]="elevationOptions.ceil || 9999" />
                                 </label>
                             </div>
                         </div>
@@ -306,8 +319,12 @@
                 </div>
                 <hr>
                 <div class="Hr-filter-field">
-                    <div class="filter-field-title">
-                        Average Heart Rate
+                    <div class="filter-field-header d-flex justify-content-between">
+                        <div class="filter-field-title">
+                            Average Heart Rate
+                        </div>
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="tempHrChecked"
+                            id="flexCheckDefaultHr" />
                     </div>
                     <div class="filter-field-hr-content">
                         <div class="hr-slider" *ngIf="isBrowser">
@@ -316,7 +333,7 @@
                             <div class="slider-values d-flex justify-content-between align-items-center mt-2">
                                 <label>
                                     Min: &nbsp;
-                                    <input type="number" [(ngModel)]="minHrValue" [min]="hrOptions.floor || 0"
+                                    <input type="number" [(ngModel)]="minHrValue" [min]="hrOptions.floor || 90"
                                         [max]="maxHrValue || 4000" />
                                 </label>
                                 <label>
