@@ -92,7 +92,7 @@ app.get('/rides/distance/:num', async (req, res) => {
 Add all rides to the database 
 */
 app.post('/rides', async (req, res) => {
-    const getAllActivities = require('./services/get_all_activities.js');
+    const {getAllActivities} = require('./services/get_all_activities.js');
     const rides = await getAllActivities();
     rides.forEach(saveRide);
     function saveRide(value) {
@@ -162,7 +162,7 @@ app.patch('/rides/tags/:title/:date', (req, res) => {
     Ride.findOneAndUpdate({ title: req.params.title, date: req.params.date }, {
         tags: req.body.tags
     }, { new: true })
-        .then((ride) => res.send(ride))
+        .then((ride) =>  res.send(ride))
         .catch((error) => console.log(error));
 })
 

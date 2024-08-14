@@ -377,15 +377,24 @@ input[type=number] {
 
 /*Favorite icon*/
 
-.favorite-button {
+.tag-button {
     background-color: transparent;
-    height: 30px;
-    width: 30px;
+    height: 35px;
+    width: 35px;
     border: none;
 }
 
-.star-icon-metrics {
+.tag-icon {
     height: 30px;
     width: 30px;
 }
+
+.tag-icon-challenging{
+    height: 50px;
+    padding-bottom: 15px;
+}
+
+.tag-icon-challenging-filled{
+    height: 30px;
+} 
 

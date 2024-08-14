@@ -131,7 +131,7 @@ export class ActivitiesListComponent implements OnInit {
           continue;
         }
       }
-      if (this.favoritesChecked && !activity.tags.includes("favorites")) {
+      if (this.favoritesChecked && !activity.tags.includes("favorite")) {
         continue;
       }
       if (this.climbChecked && !activity.tags.includes("climb")) {
@@ -530,12 +530,73 @@ export class ActivitiesListComponent implements OnInit {
         }
       }
 
+      if (tag == 'climb') {
+        const isFavorite = this.expandedActivity.tags.includes('climb');
+
+        // Toggle the "favorite" tag
+        if (isFavorite) {
+          // Remove the "favorite" tag
+          this.expandedActivity.tags = this.expandedActivity.tags.filter(tag => tag !== 'climb');
+        } else {
+          // Add the "favorite" tag
+          this.expandedActivity.tags.push('climb');
+        }
+      }
+
+
+      if (tag == 'workout') {
+        const isWorkout = this.expandedActivity.tags.includes('workout');
+
+        // Toggle the "favorite" tag
+        if (isWorkout) {
+          // Remove the "favorite" tag
+          this.expandedActivity.tags = this.expandedActivity.tags.filter(tag => tag !== 'workout');
+        } else {
+          // Add the "favorite" tag
+          this.expandedActivity.tags.push('workout');
+        }
+      }
+
+
+      if (tag == 'scenic') {
+        const isScenic = this.expandedActivity.tags.includes('scenic');
+
+        // Toggle the "favorite" tag
+        if (isScenic) {
+          // Remove the "favorite" tag
+          this.expandedActivity.tags = this.expandedActivity.tags.filter(tag => tag !== 'scenic');
+        } else {
+          // Add the "favorite" tag
+          this.expandedActivity.tags.push('scenic');
+        }
+      }
+
+
+      if (tag == 'challenging') {
+        const isChallenging = this.expandedActivity.tags.includes('challenging');
+
+        // Toggle the "favorite" tag
+        if (isChallenging) {
+          // Remove the "favorite" tag
+          this.expandedActivity.tags = this.expandedActivity.tags.filter(tag => tag !== 'challenging');
+        } else {
+          // Add the "favorite" tag
+          this.expandedActivity.tags.push('challenging');
+        }
+      }
+
       // Call the service to update the favorite status
       this.activitiesService.updateActivityTags(
         this.expandedActivity.title,
         this.expandedActivity.date,
         this.expandedActivity.tags // Pass the updated tags
-      );
+      ) .subscribe(updatedActivity => {
+        if (this.expandedActivity !== null) {
+          console.log("tags updated");
+        }
+      }, error => {
+        console.error('Error updating notes', error);
+      });
     }
   }
 
