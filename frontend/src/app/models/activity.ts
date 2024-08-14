@@ -19,7 +19,7 @@ export default class Activity {
   maxHeartRate: number;
   mapData: MapData;
   notes: string;
-  favorite: boolean;
+  tags: string[];
   images: string[];
 
 
@@ -36,7 +36,7 @@ export default class Activity {
     maxHeartRate: number,
     mapData: MapData,
     notes: string,
-    favorite: boolean,
+    tags: string[],
     images: string[]
   ) {
     this.avgSpeed = avgSpeed;
@@ -51,7 +51,7 @@ export default class Activity {
     this.maxHeartRate = maxHeartRate;
     this.mapData = mapData;
     this.notes = notes;
-    this.favorite = favorite;
+    this.tags = tags;
     this.images = images;
   }
 }

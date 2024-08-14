@@ -46,10 +46,12 @@ export class ActivitiesListComponent implements OnInit {
   tempDistanceChecked: boolean = true;
   tempElevationChecked: boolean = true;
   tempHrChecked: boolean = true;
+  tempFavoritesChecked: boolean = false;
 
   distanceChecked: boolean = true;
   elevationChecked: boolean = true;
   hrChecked: boolean = true;
+  favoritesChecked: boolean = false;
 
 
 
@@ -70,33 +72,35 @@ export class ActivitiesListComponent implements OnInit {
     this.minElevationValue = this.minElevationFilter
   }
 
-
+  /* Method called to apply the filter when save changes is clicked on the filter modal*/
   applyFilter(): void {
     this.distanceChecked = this.tempDistanceChecked;
     this.elevationChecked = this.tempElevationChecked;
     this.hrChecked = this.tempHrChecked;
-    // Set maxDistanceFilter and minDistanceFilter based on the slider values
     if (this.distanceChecked) {
       this.maxDistanceFilter = this.maxDistanceValue === 400 ? 9999 : this.maxDistanceValue;
       this.minDistanceFilter = this.minDistanceValue;
     }
-
     if (this.elevationChecked) {
       this.maxElevationFilter = this.maxElevationValue === 4000 ? 9999 : this.maxElevationValue;
       this.minElevationFilter = this.minElevationValue;
     }
-
     if (this.hrChecked) {
       this.maxHrFilter = this.maxHrValue === 165 ? 9999 : this.maxHrValue;
       this.minHrFilter = this.minHrValue;
     }
-    // Clear the filteredActivities array
+    const startTime = this.getStartTimeBasedOnSelection();
     this.filteredActivities = [];
 
     // Loop through each activity and apply all filters
     for (let idx = 0; idx < this.activities.length; idx++) {
       const activity = this.activities[idx];
-      console.log(activity);
+
+      // Time filter - Ensure the activity is within the specified time range
+      const activityDate = new Date(activity.date); // Assuming 'date' is a string in ISO format or similar
+      if (activityDate < startTime) {
+        continue; // Skip activities outside the time range
+      }
 
       if (this.distanceChecked) {
         if (!(this.maxDistanceFilter >= activity.distance / 1000 && this.minDistanceFilter <= activity.distance / 1000)) {
@@ -116,6 +120,7 @@ export class ActivitiesListComponent implements OnInit {
         }
       }
 
+
       this.filteredActivities.push(activity);
 
     }
@@ -123,15 +128,16 @@ export class ActivitiesListComponent implements OnInit {
 
     // Update displayed activities
     this.displayedActivities = this.filteredActivities;
-    console.log(this.displayedActivities);
+    console.log("Displaying " + this.displayedActivities.length + " Activities");
     this.displayPage(1);
+
 
     // Close the modal
     this.closeBtn.nativeElement.click();
   }
 
 
-
+  //Distance slider
   minDistanceValue: number = 50;
   maxDistanceValue: number = 150;
   distanceOptions: Options = {
@@ -162,7 +168,7 @@ export class ActivitiesListComponent implements OnInit {
       }
     }
   };
-
+  //Elevation Slider
   minElevationValue: number = 100;
   maxElevationValue: number = 1000;
   elevationOptions: Options = {
@@ -192,7 +198,7 @@ export class ActivitiesListComponent implements OnInit {
       }
     }
   };
-
+  //Hr Slider
   minHrValue: number = 125;
   maxHrValue: number = 145;
   hrOptions: Options = {
@@ -222,6 +228,39 @@ export class ActivitiesListComponent implements OnInit {
       }
     }
   };
+
+  /* Function to calculate the start time based on selected radio option */
+  getStartTimeBasedOnSelection(): Date {
+    // Get the selected radio button
+    const selectedRadio = document.querySelector('input[name="flexRadioDefault"]:checked') as HTMLInputElement;
+
+    // Get the current date
+    const endTime = new Date();
+    let startTime: Date;
+
+    // Calculate the start time based on the selected value
+    switch (selectedRadio.value) {
+      case "1year":
+        startTime = new Date(endTime.getFullYear() - 1, endTime.getMonth(), endTime.getDate());
+        break;
+      case "6months":
+        startTime = new Date(endTime.getFullYear(), endTime.getMonth() - 6, endTime.getDate());
+        break;
+      case "1month":
+        startTime = new Date(endTime.getFullYear(), endTime.getMonth() - 1, endTime.getDate());
+        break;
+      case "1week":
+        startTime = new Date(endTime.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 days ago
+        break;
+      case "allTime":
+      default:
+        startTime = new Date(0); // Set to the earliest possible date if "All time" is selected
+        break;
+    }
+
+    return startTime;
+  }
+
   /////////////////
 
   constructor(private activitiesService: ActivitiesService, @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2) {
@@ -448,11 +487,29 @@ export class ActivitiesListComponent implements OnInit {
   }
 
   ///Favoriting an avtivity
-  toggleFavorite(): void {
+  toggleTag(tag: string): void {
     if (this.expandedActivity != null) {
-      this.expandedActivity.favorite = !this.expandedActivity?.favorite
+      // Check if the "favorite" tag is present in the tags array
+      if (tag == 'favorite') {
+        const isFavorite = this.expandedActivity.tags.includes('favorite');
+
+        // Toggle the "favorite" tag
+        if (isFavorite) {
+          // Remove the "favorite" tag
+          this.expandedActivity.tags = this.expandedActivity.tags.filter(tag => tag !== 'favorite');
+        } else {
+          // Add the "favorite" tag
+          this.expandedActivity.tags.push('favorite');
+        }
+      }
+
+      // Call the service to update the favorite status
+      this.activitiesService.updateActivityTags(
+        this.expandedActivity.title,
+        this.expandedActivity.date,
+        this.expandedActivity.tags // Pass the updated tags
+      );
     }
-    this.activitiesService.toggleActivityFavorite(this.expandedActivity!.title, this.expandedActivity!.date, this.expandedActivity!.favorite);
   }
 
   ////////////////////////////////////
@@ -470,6 +527,10 @@ export class ActivitiesListComponent implements OnInit {
     const r = 255;
     const g = Math.floor(255 * (1 - normalized));
     const b = 255;
+
+    if (distance <= 10) {
+      return 'rgb(255, 245, 255)';
+    }
 
     return `rgb(${r}, ${g}, ${b})`;
   }

@@ -40,7 +40,7 @@ export class ActivitiesService {
     return this.webService.patch(`rides/notes/${title}/${date}`, { notes });
   }
 
-  toggleActivityFavorite(title: string, date: string, favorite: boolean) {
-    return this.webService.patch(`rides/favorite/${title}/${date}`, { favorite });
+  updateActivityTags(title: string, date: string, tags: string[]) {
+    return this.webService.patch(`rides/tags/${title}/${date}`, { tags });
   }
 }

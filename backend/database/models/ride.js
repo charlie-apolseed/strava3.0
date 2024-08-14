@@ -41,8 +41,8 @@ const RideSchema = new mongoose.Schema({
     notes: {
         type: String
     },
-    favorite: {
-        type: Boolean
+    tags: {
+        type: [String]
     },
     images: {
         type: [String]

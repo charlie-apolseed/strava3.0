@@ -41,7 +41,6 @@
 
 
 .list-content {
-    overflow-y: scroll;
     max-height: 595px;
     height: 100%;
     box-sizing: border-box;
@@ -240,7 +239,7 @@
 
 .modal .filter-field-title {
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     color: #3d4246;
 }
 
@@ -302,7 +301,7 @@
 }
 
 .hr-slider .ngx-slider .ngx-slider-selection{
-    background-color: rgb(255, 201, 255);
+    background-color: rgb(255, 200, 255);
 }
 
 /* Chrome, Safari, Edge, Opera */

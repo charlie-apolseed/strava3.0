@@ -158,9 +158,9 @@ app.patch('/rides/notes/:title/:date', (req, res) => {
 /*
 Update a ride's favorite 
 */
-app.patch('/rides/favorite/:title/:date', (req, res) => {
+app.patch('/rides/tags/:title/:date', (req, res) => {
     Ride.findOneAndUpdate({ title: req.params.title, date: req.params.date }, {
-        favorite: req.body.favorite
+        tags: req.body.tags
     }, { new: true })
         .then((ride) => res.send(ride))
         .catch((error) => console.log(error));

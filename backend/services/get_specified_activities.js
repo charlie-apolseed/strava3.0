@@ -43,7 +43,7 @@ async function getSpecifiedActivities(page) {
                         maxHeartRate: returnedActivity.max_heartrate,
                         mapData: returnedActivity.map,
                         notes: "",
-                        favorite: false,
+                        tags: [],
                         images: []
                     }; 
                     allActivities.push(processedActivity);

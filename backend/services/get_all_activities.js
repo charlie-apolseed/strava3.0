@@ -100,7 +100,7 @@ async function get50Activities() {
                     avgHeartRate: returnedActivity.average_heartrate,
                     maxHeartRate: returnedActivity.max_heartrate,
                     mapData: returnedActivity.map,
-                    favorite: false,
+                    tags: [],
                     notes: "",
                     images: []
                 };

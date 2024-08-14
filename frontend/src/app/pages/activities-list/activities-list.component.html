@@ -51,7 +51,7 @@
                     [class.expanded]="expandedActivityIndex === i" (click)="toggleActivity(i)">
                     <div class="ms-1 d-flex">
                         <div style="width: 30px; margin-right: 10px;">
-                            <img *ngIf="activity.favorite" src="icons/filled-star-icon.png" alt="filled-star-icon"
+                            <img *ngIf="activity.tags.includes('favorite')" src="icons/filled-star-icon.png" alt="filled-star-icon"
                                 class="list-filled-star-icon">
                         </div>
                         <div class="title-and-date ms-1">
@@ -93,11 +93,11 @@
                 <div class="col-7 metric-grid">
                     <div class="title-and-favorite-icon d-flex justify-content-between">
                         <h2 class="metrics-label mb-3">{{expandedActivity.title}}</h2>
-                        <button *ngIf="expandedActivity.favorite" class="favorite-button"
-                            (click)="toggleFavorite()"><img src="/icons/filled-star-icon.png" class="star-icon-metrics"
+                        <button *ngIf="expandedActivity.tags.includes('favorite')" class="favorite-button"
+                            (click)="toggleTag('favorite')"><img src="/icons/filled-star-icon.png" class="star-icon-metrics"
                                 alt="favorite-icon"></button>
-                        <button *ngIf="!expandedActivity.favorite" class="favorite-button"
-                            (click)="toggleFavorite()"><img src="/icons/empty-star-icon.png" class="star-icon-metrics"
+                        <button *ngIf="!expandedActivity.tags.includes('favorite')" class="favorite-button"
+                            (click)="toggleTag('favorite')"><img src="/icons/empty-star-icon.png" class="star-icon-metrics"
                                 alt="favorite-icon"></button>
                     </div>
                     <div class="d-flex justify-content-between metric-row">
@@ -343,6 +343,87 @@
                                 </label>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="favorites-and-date d-flex justify-content-between">
+                    <div class="date-filter-field col-5">
+                        <div class="filter-field-title">
+                            Dates
+                        </div>
+                        <div class="filter-field-date-content">
+                            <div class="form-check">
+                                <input class="form-check-input ms-1" type="radio" name="flexRadioDefault" id="allTime"
+                                    value="allTime" checked>
+                                <label class="form-check-label ms-3" for="allTime">
+                                    All time
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input ms-1" type="radio" name="flexRadioDefault" id="oneYear"
+                                    value="1year">
+                                <label class="form-check-label ms-3" for="oneYear">
+                                    1 year
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input ms-1" type="radio" name="flexRadioDefault" id="sixMonths"
+                                    value="6months">
+                                <label class="form-check-label ms-3" for="sixMonths">
+                                    6 months
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input ms-1" type="radio" name="flexRadioDefault" id="oneMonth"
+                                    value="1month">
+                                <label class="form-check-label ms-3" for="oneMonth">
+                                    1 month
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input ms-1" type="radio" name="flexRadioDefault" id="oneWeek"
+                                    value="1week">
+                                <label class="form-check-label ms-3" for="oneWeek">
+                                    1 week
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vr me-1"></div>
+                    <div class="tags-filter-field col-6">
+                        <div class="filter-field-title">
+                            Tags
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="favorites" value="favorites">
+                            <label class="form-check-label ms-3" for="favorites">
+                                <span style="color: rgb(255, 145, 255);">★</span> Favorites
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="climbs" value="climbs">
+                            <label class="form-check-label ms-3" for="climbs">
+                              🏔️ Climbs
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="scenic" value="scenic">
+                            <label class="form-check-label ms-3" for="scenic">
+                              🌄 Scenic
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="challenging" value="challenging">
+                            <label class="form-check-label ms-3" for="challenging">
+                              💪 Challenging
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="workout" value="workout">
+                            <label class="form-check-label ms-3" for="workout">
+                              💧 Workout
+                            </label>
+                          </div>
                     </div>
                 </div>
             </div>
