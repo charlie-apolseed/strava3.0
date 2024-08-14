@@ -218,6 +218,10 @@
 }
 
 /**Filter Modal */
+.modal .modal-header {
+    padding: 10px;
+}
+
 .modal .modal-title {
     font-weight: 800;
     color: #3d4246;
@@ -240,6 +244,7 @@
 .modal .filter-field-title {
     font-weight: 700;
     margin-bottom: 10px;
+    margin-top: -5px;
     color: #3d4246;
 }
 
@@ -251,8 +256,9 @@
     height: 100px;
 }
 
-
-
+.modal .distance-filter-field .filter-field-header {
+    margin-top: -5px;
+}
 
 /*Sliders */
 
@@ -318,7 +324,7 @@ input[type=number] {
 
 .slider-values{
     margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .slider-values label {

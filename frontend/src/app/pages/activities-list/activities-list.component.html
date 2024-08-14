@@ -286,7 +286,7 @@
                         </div>
                     </div>
                 </div>
-                <hr>
+                <hr class="mb-2">
                 <div class="elevation-filter-field">
                     <div class="filter-field-header d-flex justify-content-between">
                         <div class="filter-field-title">
@@ -317,7 +317,7 @@
                         </div>
                     </div>
                 </div>
-                <hr>
+                <hr class="mb-2">
                 <div class="Hr-filter-field">
                     <div class="filter-field-header d-flex justify-content-between">
                         <div class="filter-field-title">
@@ -345,7 +345,7 @@
                         </div>
                     </div>
                 </div>
-                <hr>
+                <hr class="mb-2">
                 <div class="favorites-and-date d-flex justify-content-between">
                     <div class="date-filter-field col-5">
                         <div class="filter-field-title">
@@ -395,31 +395,31 @@
                             Tags
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="favorites" value="favorites">
+                            <input class="form-check-input" type="checkbox" id="favorites" value="favorites" [(ngModel)]="tempFavoritesChecked">
                             <label class="form-check-label ms-3" for="favorites">
                                 <span style="color: rgb(255, 145, 255);">★</span> Favorites
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="climbs" value="climbs">
-                            <label class="form-check-label ms-3" for="climbs">
-                              🏔️ Climbs
+                            <input class="form-check-input" type="checkbox" id="climb" value="climb" [(ngModel)]="tempClimbChecked">
+                            <label class="form-check-label ms-3" for="climb">
+                              🏔️ Climb
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="scenic" value="scenic">
+                            <input class="form-check-input" type="checkbox" id="scenic" value="scenic" [(ngModel)]="tempScenicChecked">
                             <label class="form-check-label ms-3" for="scenic">
                               🌄 Scenic
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="challenging" value="challenging">
+                            <input class="form-check-input" type="checkbox" id="challenging" value="challenging" [(ngModel)]="tempChallengingChecked">
                             <label class="form-check-label ms-3" for="challenging">
                               💪 Challenging
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="workout" value="workout">
+                            <input class="form-check-input" type="checkbox" id="workout" value="workout" [(ngModel)]="tempWorkoutChecked">
                             <label class="form-check-label ms-3" for="workout">
                               💧 Workout
                             </label>
@@ -428,7 +428,7 @@
                 </div>
             </div>
 
-            <div class="modal-footer">
+            <div class="modal-footer p-2">
                 <button #closeBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary save-changes-button" (click)="applyFilter()">Save
                     changes</button>

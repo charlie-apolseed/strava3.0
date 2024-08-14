@@ -47,11 +47,19 @@ export class ActivitiesListComponent implements OnInit {
   tempElevationChecked: boolean = true;
   tempHrChecked: boolean = true;
   tempFavoritesChecked: boolean = false;
+  tempClimbChecked: boolean = false;
+  tempScenicChecked: boolean = false;
+  tempChallengingChecked: boolean = false;
+  tempWorkoutChecked: boolean = false;
 
   distanceChecked: boolean = true;
   elevationChecked: boolean = true;
   hrChecked: boolean = true;
   favoritesChecked: boolean = false;
+  climbChecked: boolean = false;
+  scenicChecked: boolean = false;
+  challengingChecked: boolean = false;
+  workoutChecked: boolean = false;
 
 
 
@@ -77,6 +85,13 @@ export class ActivitiesListComponent implements OnInit {
     this.distanceChecked = this.tempDistanceChecked;
     this.elevationChecked = this.tempElevationChecked;
     this.hrChecked = this.tempHrChecked;
+    this.favoritesChecked = this.tempFavoritesChecked;
+    this.climbChecked = this.tempClimbChecked;
+    this.scenicChecked = this.tempScenicChecked;
+    this.challengingChecked = this.tempChallengingChecked;
+    this.workoutChecked = this.tempWorkoutChecked;
+
+
     if (this.distanceChecked) {
       this.maxDistanceFilter = this.maxDistanceValue === 400 ? 9999 : this.maxDistanceValue;
       this.minDistanceFilter = this.minDistanceValue;
@@ -101,23 +116,35 @@ export class ActivitiesListComponent implements OnInit {
       if (activityDate < startTime) {
         continue; // Skip activities outside the time range
       }
-
       if (this.distanceChecked) {
         if (!(this.maxDistanceFilter >= activity.distance / 1000 && this.minDistanceFilter <= activity.distance / 1000)) {
           continue;
         }
       }
-
       if (this.elevationChecked) {
         if (!(this.maxElevationFilter >= activity.elevation && this.minElevationFilter <= activity.elevation)) {
           continue;
         }
       }
-
       if (this.hrChecked) {
         if (!(this.maxHrFilter >= activity.avgHeartRate && this.minHrFilter <= activity.avgHeartRate)) {
           continue;
         }
+      }
+      if (this.favoritesChecked && !activity.tags.includes("favorites")) {
+        continue;
+      }
+      if (this.climbChecked && !activity.tags.includes("climb")) {
+        continue;
+      }
+      if (this.scenicChecked && !activity.tags.includes("scenic")) {
+        continue;
+      }
+      if (this.challengingChecked && !activity.tags.includes("challenging")) {
+        continue;
+      }
+      if (this.workoutChecked && !activity.tags.includes("workout")) {
+        continue;
       }
 
 
