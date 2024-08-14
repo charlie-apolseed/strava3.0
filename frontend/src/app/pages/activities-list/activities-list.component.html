@@ -286,7 +286,7 @@
                         </div>
                     </div>
                 </div>
-                <hr class="mb-2">
+                <hr>
                 <div class="elevation-filter-field">
                     <div class="filter-field-header d-flex justify-content-between">
                         <div class="filter-field-title">
@@ -317,7 +317,7 @@
                         </div>
                     </div>
                 </div>
-                <hr class="mb-2">
+                <hr>
                 <div class="Hr-filter-field">
                     <div class="filter-field-header d-flex justify-content-between">
                         <div class="filter-field-title">
@@ -345,7 +345,7 @@
                         </div>
                     </div>
                 </div>
-                <hr class="mb-2">
+                <hr>
                 <div class="favorites-and-date d-flex justify-content-between">
                     <div class="date-filter-field col-5">
                         <div class="filter-field-title">
@@ -419,7 +419,7 @@
                             </label>
                           </div>
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="workout" value="workout" [(ngModel)]="tempWorkoutChecked">
+                            <input class="form-check-input" type="checkbox" id="workout" value="workout" [(ngModel)]="tempFavoritesChecked">
                             <label class="form-check-label ms-3" for="workout">
                               💧 Workout
                             </label>
@@ -428,7 +428,7 @@
                 </div>
             </div>
 
-            <div class="modal-footer p-2">
+            <div class="modal-footer">
                 <button #closeBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary save-changes-button" (click)="applyFilter()">Save
                     changes</button>
