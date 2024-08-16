@@ -22,7 +22,6 @@ export class ActivitiesService {
 
   /** Used for uploading recent activities not currently in database */
   uploadActivitiesToDatabase() {
-    console.log("activities-service: updating");
     return this.webService.post('rides/update', {});
   }
 

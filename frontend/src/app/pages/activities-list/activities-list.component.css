@@ -12,10 +12,19 @@
 }
 
 
-.filter-icon, .sort-icon{
+.filter-icon{
     height: 30px;
     width: 30px;
     border-radius: 3px;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+.active-sort {
+    background: rgb(249, 238, 249);; 
+    font-weight: bold;
 }
 
 /**Activities list */
@@ -158,6 +167,31 @@
     padding: 15px 0px 15px 15px;
 }
 
+.title-and-location {
+    width: 70%;
+    height: 60px;
+}
+
+.metrics-activity-title {
+    font-weight: 600;
+    font-size: 150%;
+    margin-bottom: 0;
+    overflow: hidden;
+    white-space: wrap;
+    /* Prevent text from wrapping */
+    text-overflow: ellipsis;
+}
+
+.metrics-activity-location {
+    font-weight: 500;
+    font-size: 110%;
+    margin-bottom: 0;
+    overflow: hidden;
+    white-space: wrap;
+    /* Prevent text from wrapping */
+    text-overflow: ellipsis;
+}
+
 .metric-column {
     width: 28%
 }
@@ -179,15 +213,6 @@
     /* Small space between the number and the unit */
 }
 
-.metrics-label {
-    font-weight: 600;
-    font-size: 150%;
-    margin-bottom: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    /* Prevent text from wrapping */
-    text-overflow: ellipsis;
-}
 
 .notes-label {
     font-weight: 600;
@@ -256,67 +281,67 @@
 
 /*Sliders */
 
-.elevation-slider .ngx-slider .ngx-slider-pointer-min{
+.elevation-slider .ngx-slider .ngx-slider-pointer-min {
     background-color: rgb(255, 149, 255);
 }
 
-.elevation-slider .ngx-slider .ngx-slider-pointer-max{
+.elevation-slider .ngx-slider .ngx-slider-pointer-max {
     background-color: rgb(255, 149, 255);
 }
 
-.elevation-slider .ngx-slider .ngx-slider-bar{
+.elevation-slider .ngx-slider .ngx-slider-bar {
     background-color: rgb(176, 176, 176);
 }
 
-.elevation-slider .ngx-slider .ngx-slider-selection{
+.elevation-slider .ngx-slider .ngx-slider-selection {
     background-color: rgb(255, 201, 255);
 }
 
-.distance-slider .ngx-slider .ngx-slider-pointer-min{
+.distance-slider .ngx-slider .ngx-slider-pointer-min {
     background-color: rgb(255, 149, 255);
 }
 
-.distance-slider .ngx-slider .ngx-slider-pointer-max{
+.distance-slider .ngx-slider .ngx-slider-pointer-max {
     background-color: rgb(255, 149, 255);
 }
 
-.distance-slider .ngx-slider .ngx-slider-bar{
+.distance-slider .ngx-slider .ngx-slider-bar {
     background-color: rgb(176, 176, 176);
 }
 
-.distance-slider .ngx-slider .ngx-slider-selection{
+.distance-slider .ngx-slider .ngx-slider-selection {
     background-color: rgb(255, 201, 255);
 }
 
-.hr-slider .ngx-slider .ngx-slider-pointer-min{
+.hr-slider .ngx-slider .ngx-slider-pointer-min {
     background-color: rgb(255, 149, 255);
 }
 
-.hr-slider .ngx-slider .ngx-slider-pointer-max{
+.hr-slider .ngx-slider .ngx-slider-pointer-max {
     background-color: rgb(255, 149, 255);
 }
 
-.hr-slider .ngx-slider .ngx-slider-bar{
+.hr-slider .ngx-slider .ngx-slider-bar {
     background-color: rgb(176, 176, 176);
 }
 
-.hr-slider .ngx-slider .ngx-slider-selection{
+.hr-slider .ngx-slider .ngx-slider-selection {
     background-color: rgb(255, 200, 255);
 }
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
-.slider-values{
+.slider-values {
     margin-top: 15px;
     margin-bottom: 15px;
 }
@@ -324,7 +349,8 @@ input[type=number] {
 .slider-values label {
     font-weight: 500;
     font-size: 1rem;
-    color: #55637d;;
+    color: #55637d;
+    ;
     margin: 0 10px;
     display: flex;
     align-items: center;
@@ -359,7 +385,15 @@ input[type=number] {
 .form-check-input:checked {
     background-color: rgba(255, 0, 255, 1);
     border-color: rgba(255, 0, 255, 0.6);
-  }
+}
+
+.filter-tag-icon {
+    width: 20px;
+    height: 25px;
+    padding-bottom: 5px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
 
 
 .save-changes-button {
@@ -371,6 +405,7 @@ input[type=number] {
     background-color: rgb(96, 60, 96);
     border: none;
 }
+
 /*End of Filter Modal */
 
 
@@ -379,22 +414,12 @@ input[type=number] {
 
 .tag-button {
     background-color: transparent;
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
     border: none;
 }
 
 .tag-icon {
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
 }
-
-.tag-icon-challenging{
-    height: 50px;
-    padding-bottom: 15px;
-}
-
-.tag-icon-challenging-filled{
-    height: 30px;
-} 
-

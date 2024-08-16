@@ -23,7 +23,6 @@ export class ActivitiesListComponent implements OnInit {
   displayedActivities: Activity[] = [];
   filteredActivities: Activity[] = [];
   activities: Activity[] = [];
-  showFilter = false;
   private map!: L.Map;
   private polylines: L.Polyline[] = [];
   private markers: L.Marker[] = [];
@@ -34,6 +33,8 @@ export class ActivitiesListComponent implements OnInit {
   totalActivities = 0;
   currentPage = 1;
   activitiesPerPage = 9;
+  sortCriteria = "date";
+  sortReversed = false;
 
   minHrFilter = 125;
   maxHrFilter = 145;
@@ -154,9 +155,10 @@ export class ActivitiesListComponent implements OnInit {
 
 
     // Update displayed activities
-    this.displayedActivities = this.filteredActivities;
-    console.log("Displaying " + this.displayedActivities.length + " Activities");
-    this.displayPage(1);
+    this.filteredActivities;
+    this.sortBy(this.sortCriteria);
+    console.log("Filter resulted in " + this.filteredActivities.length + " activities");
+    
 
 
     // Close the modal
@@ -295,7 +297,7 @@ export class ActivitiesListComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.activitiesService.uploadActivitiesToDatabase().subscribe({
       next: (response) => {
         console.log('Update successful', response);
@@ -313,7 +315,7 @@ export class ActivitiesListComponent implements OnInit {
     this.activitiesService.getAllActivities().subscribe(activities => {
       this.activities = activities;
       this.filteredActivities = activities;
-      this.displayPage(1);
+      this.sortBy('date');
     });
 
 
@@ -324,37 +326,7 @@ export class ActivitiesListComponent implements OnInit {
     }
   }
 
-  /**Footer section */
-  displayPage(page: number): void {
-    this.currentPage = page;
-    const startIndex = (page - 1) * this.activitiesPerPage;
-    const endIndex = startIndex + this.activitiesPerPage;
-    this.displayedActivities = this.filteredActivities.slice(startIndex, endIndex);
-  }
-
-  nextPage(): void {
-    if ((this.currentPage * this.activitiesPerPage) < this.filteredActivities.length) {
-      this.displayPage(this.currentPage + 1);
-      this.resetHighlightColor();
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage !== 1) {
-      this.displayPage(this.currentPage - 1);
-      this.resetHighlightColor();
-    }
-  }
-
-  getEndIndex(): number {
-    return Math.min(this.currentPage * this.activitiesPerPage, this.filteredActivities.length);
-  }
-
-  private resetHighlightColor(): void {
-    this.expandedActivityIndex = null;
-  }
-  /**End of Footer Section */
-
+  /** TOGGLE ACTIVITY LOGIC*/
   toggleActivity(index: number): void {
     if (this.expandedActivityIndex === index) {
       this.collapseActivity();
@@ -391,7 +363,10 @@ export class ActivitiesListComponent implements OnInit {
     this.clearMarkers();
     this.addPolyline(index);
   }
+  /** END OF TOGGLE ACTIVITY LOGIC */
 
+
+  /** MAP LOGIC */
   private loadLeaflet(): Promise<any> {
     return new Promise((resolve, reject) => {
       if (isPlatformBrowser(this.platformId)) {
@@ -404,6 +379,7 @@ export class ActivitiesListComponent implements OnInit {
       }
     });
   }
+
 
   private initMap(): void {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -473,6 +449,42 @@ export class ActivitiesListComponent implements OnInit {
       padding: [this.map.getSize().x * padding, this.map.getSize().y * padding]
     });
   }
+   /**END OF MAP LOGIC */
+
+  /**Footer section */
+  displayPage(page: number): void {
+    this.currentPage = page;
+    const startIndex = (page - 1) * this.activitiesPerPage;
+    const endIndex = startIndex + this.activitiesPerPage;
+    this.displayedActivities = this.filteredActivities.slice(startIndex, endIndex);
+  }
+
+  nextPage(): void {
+    if ((this.currentPage * this.activitiesPerPage) < this.filteredActivities.length) {
+      this.displayPage(this.currentPage + 1);
+      this.resetHighlightColor();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage !== 1) {
+      this.displayPage(this.currentPage - 1);
+      this.resetHighlightColor();
+    }
+  }
+
+  getEndIndex(): number {
+    return Math.min(this.currentPage * this.activitiesPerPage, this.filteredActivities.length);
+  }
+
+  private resetHighlightColor(): void {
+    this.expandedActivityIndex = null;
+  }
+  /**End of Footer Section */
+
+  
+
+  
 
   ////////////////////////////////////
   /*Logic for editing and saving note*/
@@ -600,11 +612,42 @@ export class ActivitiesListComponent implements OnInit {
     }
   }
 
-  ////////////////////////////////////
-  /*Logic for displaying filter info*/
-  displayFilterInfo(): void {
-    this.showFilter = !this.showFilter;
+  sortBy(criteria: string): void{
+    this.sortCriteria = criteria;
+    switch (this.sortCriteria) {
+    case 'distance':
+      this.filteredActivities.sort((a, b) => b.distance - a.distance);
+      break;
+    case 'elevation':
+      this.filteredActivities.sort((a, b) => b.elevation - a.elevation);
+      break;
+    case 'date':
+      this.filteredActivities.sort(this.dateComparator);
+      break;
+    default:
+      this.filteredActivities.sort(this.dateComparator);
+      break;
+   }
+   if (this.sortReversed) {
+    this.filteredActivities.reverse()
+   }
+   this.displayPage(1);
   }
+
+
+  dateComparator(a: Activity, b: Activity): number {
+    const aDate = new Date(a.date);
+    const bDate = new Date(b.date);
+    return bDate.getTime() - aDate.getTime()
+  }
+
+  toggleSortOrder(): void {
+    this.sortReversed = !this.sortReversed;
+    this.sortBy(this.sortCriteria);
+  }
+
+
+
 
   ////////////////////////////////////
   /*Logic for conditional distance coloring*/
