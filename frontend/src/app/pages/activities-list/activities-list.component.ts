@@ -7,6 +7,7 @@ import { decode } from '@googlemaps/polyline-codec';
 import { DurationPipe } from '../../pipes/duration.pipe';
 import { LabelType, NgxSliderModule, Options } from '@angular-slider/ngx-slider';
 import { HttpErrorResponse } from '@angular/common/http';
+import { title } from 'process';
 
 @Component({
   selector: 'app-activities-list',
@@ -17,6 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   encapsulation: ViewEncapsulation.None,
 })
 export class ActivitiesListComponent implements OnInit {
+  @ViewChild('titleElement') titleContent!: ElementRef;
   @ViewChild('noteContent') noteContent!: ElementRef;
   @ViewChild('closeBtn') closeBtn!: ElementRef;
   isBrowser: boolean;
@@ -33,6 +35,7 @@ export class ActivitiesListComponent implements OnInit {
   totalActivities = 0;
   currentPage = 1;
   activitiesPerPage = 9;
+  isSingleLine: boolean = true;
   sortCriteria = "date";
   sortReversed = false;
 
@@ -158,7 +161,7 @@ export class ActivitiesListComponent implements OnInit {
     this.filteredActivities;
     this.sortBy(this.sortCriteria);
     console.log("Filter resulted in " + this.filteredActivities.length + " activities");
-    
+
 
 
     // Close the modal
@@ -359,10 +362,19 @@ export class ActivitiesListComponent implements OnInit {
     if (noteContent != null) {
       this.cancelEditing(noteContent);
     }
+    setTimeout(() => {
+      const titleElement = this.titleContent.nativeElement;
+      this.isSingleLine = titleElement.clientHeight <= 40;
+      console.log("Is single line:", this.isSingleLine);
+    });
     this.clearPolylines();
     this.clearMarkers();
     this.addPolyline(index);
+    // Check if the title fits in a single line
+
   }
+
+
   /** END OF TOGGLE ACTIVITY LOGIC */
 
 
@@ -449,7 +461,7 @@ export class ActivitiesListComponent implements OnInit {
       padding: [this.map.getSize().x * padding, this.map.getSize().y * padding]
     });
   }
-   /**END OF MAP LOGIC */
+  /**END OF MAP LOGIC */
 
   /**Footer section */
   displayPage(page: number): void {
@@ -482,9 +494,9 @@ export class ActivitiesListComponent implements OnInit {
   }
   /**End of Footer Section */
 
-  
 
-  
+
+
 
   ////////////////////////////////////
   /*Logic for editing and saving note*/
@@ -602,7 +614,7 @@ export class ActivitiesListComponent implements OnInit {
         this.expandedActivity.title,
         this.expandedActivity.date,
         this.expandedActivity.tags // Pass the updated tags
-      ) .subscribe(updatedActivity => {
+      ).subscribe(updatedActivity => {
         if (this.expandedActivity !== null) {
           console.log("tags updated");
         }
@@ -612,26 +624,26 @@ export class ActivitiesListComponent implements OnInit {
     }
   }
 
-  sortBy(criteria: string): void{
+  sortBy(criteria: string): void {
     this.sortCriteria = criteria;
     switch (this.sortCriteria) {
-    case 'distance':
-      this.filteredActivities.sort((a, b) => b.distance - a.distance);
-      break;
-    case 'elevation':
-      this.filteredActivities.sort((a, b) => b.elevation - a.elevation);
-      break;
-    case 'date':
-      this.filteredActivities.sort(this.dateComparator);
-      break;
-    default:
-      this.filteredActivities.sort(this.dateComparator);
-      break;
-   }
-   if (this.sortReversed) {
-    this.filteredActivities.reverse()
-   }
-   this.displayPage(1);
+      case 'distance':
+        this.filteredActivities.sort((a, b) => b.distance - a.distance);
+        break;
+      case 'elevation':
+        this.filteredActivities.sort((a, b) => b.elevation - a.elevation);
+        break;
+      case 'date':
+        this.filteredActivities.sort(this.dateComparator);
+        break;
+      default:
+        this.filteredActivities.sort(this.dateComparator);
+        break;
+    }
+    if (this.sortReversed) {
+      this.filteredActivities.reverse()
+    }
+    this.displayPage(1);
   }
 
 

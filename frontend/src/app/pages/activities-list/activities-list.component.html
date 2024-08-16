@@ -33,25 +33,20 @@
                 Sort
             </button>
             <div class="dropdown-menu" aria-labelledby="sortMenuButton">
-                <a class="dropdown-item" 
-                   [ngClass]="{'active-sort': sortCriteria === 'date'}" 
-                   (click)="sortBy('date')">Date</a>
-                <a class="dropdown-item" 
-                   [ngClass]="{'active-sort': sortCriteria === 'distance'}" 
-                   (click)="sortBy('distance')">Distance</a>
-                <a class="dropdown-item" 
-                   [ngClass]="{'active-sort': sortCriteria === 'elevation'}" 
-                   (click)="sortBy('elevation')">Elevation</a>
+                <a class="dropdown-item" [ngClass]="{'active-sort': sortCriteria === 'date'}"
+                    (click)="sortBy('date')">Date</a>
+                <a class="dropdown-item" [ngClass]="{'active-sort': sortCriteria === 'distance'}"
+                    (click)="sortBy('distance')">Distance</a>
+                <a class="dropdown-item" [ngClass]="{'active-sort': sortCriteria === 'elevation'}"
+                    (click)="sortBy('elevation')">Elevation</a>
                 <div class="dropdown-divider"></div>
-             
-                    <a class="dropdown-item" 
-                   [ngClass]="{'active-sort': !sortReversed}" 
-                   (click)="toggleSortOrder()">Ascending</a>
-                <a class="dropdown-item" 
-                   [ngClass]="{'active-sort': sortReversed}" 
-                   (click)="toggleSortOrder()">Descending</a>
-   
-                
+
+                <a class="dropdown-item" [ngClass]="{'active-sort': !sortReversed}"
+                    (click)="toggleSortOrder()">Ascending</a>
+                <a class="dropdown-item" [ngClass]="{'active-sort': sortReversed}"
+                    (click)="toggleSortOrder()">Descending</a>
+
+
             </div>
 
             <button class="btn btn-dark d-flex align-items-center justify-content-between px-3 me-2 filter-button"
@@ -148,8 +143,8 @@
                 <div class="col-7 metric-grid">
                     <div class="title-and-tags d-flex justify-content-between">
                         <div class="title-and-location">
-                            <h2 class="metrics-activity-title">{{expandedActivity.title}}</h2>
-                            <h2 class="metrics-activity-location text-muted" *ngIf="30 > expandedActivity.title.length">
+                            <h2 #titleElement class="metrics-activity-title">{{expandedActivity.title}}</h2>
+                            <h2 class="metrics-activity-location text-muted" *ngIf="isSingleLine">
                                 Sample location
                             </h2>
                         </div>
