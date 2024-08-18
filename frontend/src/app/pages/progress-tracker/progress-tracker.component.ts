@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import Goal from '../../models/goal';
+import { GoalsService } from '../../services/goals.service';
 
 @Component({
   selector: 'app-progress-tracker',
@@ -11,8 +13,17 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 })
 export class ProgressTrackerComponent {
   currentDistance = 600;
-  currentElevation = 100
-  goals = [{ title: "Cycle Across the US", startDate: null, targetDate: null, metric: "distance", startValue: 0, targetValue: 1000 }];
+  currentElevation = 100;
+  goals: Goal[] = [];
+  
+  
+  constructor(private goalService: GoalsService) {}
+
+  addNewGoal(): void {
+    let newGoal = new Goal( "Cycle Across the US", "", "", 0, 1000, "distance");
+    console.log("newGoal object:", newGoal);
+    this.goalService.addNewGoal(newGoal);
+  }
 
   getProgress(goalIdx: number): number {
     const selectedGoal = this.goals[goalIdx];

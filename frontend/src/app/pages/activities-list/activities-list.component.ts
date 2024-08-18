@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, PLATFORM_ID, Renderer2, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import Activity from '../../models/activity';
-import { ActivitiesService } from '../../activities.service';
+import { ActivitiesService } from '../../services/activities.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,7 @@ import { decode } from '@googlemaps/polyline-codec';
 import { DurationPipe } from '../../pipes/duration.pipe';
 import { LabelType, NgxSliderModule, Options } from '@angular-slider/ngx-slider';
 import { HttpErrorResponse } from '@angular/common/http';
-import { title } from 'process';
+
 
 @Component({
   selector: 'app-activities-list',

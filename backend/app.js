@@ -6,6 +6,7 @@ const app = express();
 
 //Import the database model
 const Ride = require('./database/models/ride');
+const Goal = require('./database/models/goal')
 
 //Allow the application to use json data
 app.use(express.json());
@@ -174,3 +175,10 @@ app.delete('/rides/:title/:date', (req, res) => {
         .then((ride) => res.send(ride))
         .catch((error) => console.log(error));
 })
+
+app.post('/goals', (req, res) => {
+    console.log("addNewGoal backend triggered");
+    new Goal(req.body).save()
+        .then(() => res.send("New goal successfully created: " + req.body.title))
+        .catch((error) => res.status(500).send(error));
+});

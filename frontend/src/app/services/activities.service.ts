@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WebService } from './web.service';
 import { title } from 'process';
 import { Observable } from 'rxjs';
-import Activity from './models/activity';
+import Activity from '../models/activity';
 
 @Injectable({
   providedIn: 'root'
