@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID, Renderer2, ElementRef, ViewChil
 import Activity from '../../models/activity';
 import { ActivitiesService } from '../../activities.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { decode } from '@googlemaps/polyline-codec';
 import { DurationPipe } from '../../pipes/duration.pipe';
@@ -12,7 +13,7 @@ import { title } from 'process';
 @Component({
   selector: 'app-activities-list',
   standalone: true,
-  imports: [CommonModule, DurationPipe, NgxSliderModule, FormsModule],
+  imports: [CommonModule, DurationPipe, NgxSliderModule, FormsModule, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './activities-list.component.html',
   styleUrls: ['./activities-list.component.css'],
   encapsulation: ViewEncapsulation.None,

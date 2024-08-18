@@ -1,0 +1,38 @@
+<header class="p-2">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a routerLink="/" class="logo-container d-flex align-items-center justify-content-center text-decoration-none"
+                style="height: 25px;">
+                <img class="bi me-2" width="32" height="32" role="img" src="icons/mountain-icon-50.png" alt="Logo">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto ms-1 mb-2 justify-content-center mb-md-0">
+                <li><a routerLink="#" class="nav-link px-2 me-3" style="color: rgb(255, 0, 255); font-weight: 600;">Strava
+                        Visualizer</a></li>
+                <li><a routerLink="../activities" class="nav-link px-2 text-black">Activities</a></li>
+                <li><a routerLink="#" class="nav-link px-2 text-black">Map</a></li>
+                <li><a routerLink="#" class="nav-link px-2 text-black">Training Log</a></li>
+                <li><a routerLink="progress" class="nav-link px-2 text-secondary">Progress</a></li>
+            </ul>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-dark">Home</button>
+            </div>
+        </div>
+    </div>
+    <hr class="mb-0">
+</header>
+<li *ngFor="let goal of goals; let i = index">
+    <div class="goal-title">{{goal.title}}</div>
+    <div></div>
+    <div class="progress">
+        <div class="progress-bar" 
+             role="progressbar" 
+             [style.width.%]="getProgress(i)" 
+             [attr.aria-valuenow]="getProgress(i)" 
+             aria-valuemin="0" 
+             aria-valuemax="100">
+             {{getProgress(i)}}%
+        </div>
+    </div>
+</li>

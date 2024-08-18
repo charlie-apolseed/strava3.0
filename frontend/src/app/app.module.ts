@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { ActivitiesListComponent } from './pages/activities-list/activities-list.component';
+import { ProgressTrackerComponent } from './pages/progress-tracker/progress-tracker.component';
 import { DurationPipe } from './pipes/duration.pipe';
 
 
@@ -12,7 +13,8 @@ import { DurationPipe } from './pipes/duration.pipe';
   declarations: [
     AppComponent,
     ActivitiesListComponent,
-    DurationPipe
+    DurationPipe,
+    ProgressTrackerComponent
     // Add other components here
   ],
   imports: [
