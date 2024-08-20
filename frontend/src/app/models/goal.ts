@@ -5,6 +5,7 @@ export default class Goal {
     startValue: number;
     targetValue: number;
     metric: string;
+    completed: boolean;
 
     constructor(
         title: string,
@@ -12,7 +13,8 @@ export default class Goal {
         targetDate: string,
         startValue: number,
         targetValue: number,
-        metric: string
+        metric: string,
+        completed: boolean
     ) {
 
         this.title = title;
@@ -21,5 +23,6 @@ export default class Goal {
         this.startValue = startValue
         this.targetValue = targetValue;
         this.metric = metric;
+        this.completed = completed;
     }
 }

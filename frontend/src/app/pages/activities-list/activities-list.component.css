@@ -1,3 +1,11 @@
+/* General page setup */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
 .logo-container p {
     font-weight: 600;
     font-size: 150%;
@@ -227,7 +235,7 @@
     background-color: none;
     border-radius: 5px;
     word-wrap: break-word;
-    overflow-y: scroll;
+    overflow-y: auto;
     white-space: normal;
 }
 

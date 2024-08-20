@@ -8,10 +8,10 @@ const GoalSchema = new mongoose.Schema({
         minLength: 0
     },
     startDate: {
-        type: String,
+        type: String
     },
     targetDate: {
-        type: Number
+        type: String
     },
     startValue: {
         type: Number
@@ -21,6 +21,11 @@ const GoalSchema = new mongoose.Schema({
     },
     metric: {
         type: String
+    },
+    completed: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 })
 

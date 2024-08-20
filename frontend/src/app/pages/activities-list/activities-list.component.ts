@@ -304,7 +304,7 @@ export class ActivitiesListComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.activitiesService.uploadActivitiesToDatabase().subscribe({
       next: (response) => {
-        console.log('Update successful', response);
+        console.log(response);
       },
       error: (error) => {
         console.error('Update failed', error);

@@ -22,7 +22,7 @@
     </div>
     <hr class="mb-0">
 </header>
-<li *ngFor="let goal of goals; let i = index">
+<li *ngFor="let goal of activeGoals; let i = index">
     <div class="goal-title">{{goal.title}}</div>
     <div></div>
     <div class="progress">
@@ -37,3 +37,5 @@
     </div>
 </li>
 <button (click)="addNewGoal()">Add new goal</button>
+<button (click)="getAllGoals()">Get all goals</button>
+<button (click)="getActiveGoals()">Get active goals</button>
