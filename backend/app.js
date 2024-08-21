@@ -193,3 +193,4 @@ app.post('/goals', async (req, res) => {
         .then(() => res.json({ message: "New goal successfully created", title: req.body.title }))
         .catch((error) => res.status(500).send(error));
 });
+

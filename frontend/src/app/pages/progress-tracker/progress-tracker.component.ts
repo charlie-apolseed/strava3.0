@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import Goal from '../../models/goal';
@@ -13,10 +13,16 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './progress-tracker.component.css'
 })
 export class ProgressTrackerComponent {
+  @ViewChild('closeBtn') closeBtn!: ElementRef;
   currentDistance = 600;
   currentElevation = 100;
   allGoals: Goal[] = [];
   activeGoals: Goal[] = [];
+
+  newGoalMetricLabel: string = "Select Metric";
+  newGoalMetric:  string = "Distance";
+  newGoalDateLabel: string = "Select Target Date";
+  newGoalDate: string = "One Year";
 
 
   constructor(private goalService: GoalsService) { }
@@ -37,6 +43,32 @@ export class ProgressTrackerComponent {
       }
     });
   }
+
+  saveNewGoal(): void {
+    this.closeBtn.nativeElement.click();
+  }
+
+  resetNewGoalFields(): void {
+    this.newGoalMetricLabel = "Select Metric";
+    this.newGoalMetric = "";
+    this.newGoalDateLabel = "Select Target Date";
+    this.newGoalDate = "";
+  }
+
+  setNewGoalMetric(metric: string) {
+    this.newGoalMetric = metric;
+    this.newGoalMetricLabel = metric;
+  }
+
+  setNewGoalDate(date: string) {
+    this.newGoalDate = date;
+    this.newGoalDateLabel = date;
+  }
+
+
+
+
+
 
   getAllGoals(): void {
     this.goalService.getAllGoals().subscribe(goals => {
