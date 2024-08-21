@@ -35,74 +35,51 @@
     </div>
 </li>
 
-<button class="btn btn-dark d-flex align-items-center justify-content-between px-3 me-2 filter-button"
-    data-bs-toggle="modal" data-bs-target="#newGoalModal" (click)="resetNewGoalFields()">
-    <img src="icons/filter-icon.png" alt="Filter Icon" class="filter-icon me-2">
-    Filter
-</button>
+<button (click)="displayNewGoalForm()">Create New Goal</button>
 <button (click)="getAllGoals()">Get all goals</button>
 <button (click)="getActiveGoals()">Get active goals</button>
 
-
-<div class="modal fade" id="newGoalModal" tabindex="-1" aria-labelledby="newGoalModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header d-flex justify-content-between">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">New Goal</h1>
-                <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">X</button>
+<div class="new-goal-form" *ngIf="newGoalSectionDisplayed">
+    <div class="d-flex justify-content-between new-goal-section metric-and-date">
+        <div class="newGoal-metric">
+            <button type="button" class="btn btn-dark dropdown-toggle p-2" id="sortMenuButton" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                {{newGoalMetricLabel}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="metricButton">
+                <a class="dropdown-item" [ngClass]="{'active-metric': newGoalMetric === 'Elevation'}"
+                    (click)="setNewGoalMetric('Elevation')">Date</a>
+                <a class="dropdown-item" [ngClass]="{'active-metric': newGoalMetric === 'Distance'}"
+                    (click)="setNewGoalMetric('Distance')">Distance</a>
             </div>
-
-            <div class="modal-body">
-                <div class="d-flex new-goal-section newGoal-title">
-                    <input type="text" placeholder="Goal Title" id="goal-title-input" class="newGoal-title-input"
-                        autocomplete="off">
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between new-goal-section metric-and-date">
-                    <div class="newGoal-metric">
-                        <button type="button" class="btn btn-dark dropdown-toggle p-2" id="sortMenuButton"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            {{newGoalMetricLabel}}
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="metricButton">
-                            <a class="dropdown-item" [ngClass]="{'active-metric': newGoalMetric === 'Elevation'}"
-                                (click)="setNewGoalMetric('Elevation')">Date</a>
-                            <a class="dropdown-item" [ngClass]="{'active-metric': newGoalMetric === 'Distance'}"
-                                (click)="setNewGoalMetric('Distance')">Distance</a>
-                        </div>
-                    </div>
-                    <div class="newGoal-date">
-                        <button type="button" class="btn btn-dark dropdown-toggle p-2" id="sortMenuButton"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            {{newGoalDateLabel}}
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="metricButton">
-                            <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '1 Week'}"
-                                (click)="setNewGoalDate('1 Week')">1 Week</a>
-                            <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '2 Week'}"
-                                (click)="setNewGoalDate('2 Weeks')">2 Week</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '1 Month'}"
-                                (click)="setNewGoalDate('1 Month')">1 Month</a>
-                            <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '3 Month'}"
-                                (click)="setNewGoalDate('3 Months')">3 Month</a>
-                            <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '6 Month'}"
-                                (click)="setNewGoalDate('6 Months')">6 Month</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '1 Year'}"
-                                (click)="setNewGoalDate('1 Year')">1 Year</a>
-                            <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === 'All Time'}"
-                                (click)="setNewGoalDate('All Time')">All Time</a>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-
-                <div class="modal-footer">
-                    <button #closeBtn type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary save-changes-button" (click)="saveNewGoal()">Save
-                        changes</button>
-                </div>
+        </div>
+        <div class="newGoal-date">
+            <button type="button" class="btn btn-dark dropdown-toggle p-2" id="sortMenuButton" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                {{newGoalDateLabel}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="metricButton">
+                <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '1 Week'}"
+                    (click)="setNewGoalDate('1 Week')">1 Week</a>
+                <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '2 Week'}"
+                    (click)="setNewGoalDate('2 Weeks')">2 Week</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '1 Month'}"
+                    (click)="setNewGoalDate('1 Month')">1 Month</a>
+                <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '3 Month'}"
+                    (click)="setNewGoalDate('3 Months')">3 Month</a>
+                <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '6 Month'}"
+                    (click)="setNewGoalDate('6 Months')">6 Month</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '1 Year'}"
+                    (click)="setNewGoalDate('1 Year')">1 Year</a>
+                <a class="dropdown-item" [ngClass]="{'active-date': newGoalDate === '3 Year'}"
+                    (click)="setNewGoalDate('1 Year')">3 Year</a>
             </div>
         </div>
     </div>
+    <hr>
+    <div class="new-goal-section target-value">
+
+    </div>
+</div>

@@ -1,31 +1,41 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import Goal from '../../models/goal';
+import { FormsModule } from '@angular/forms';
 import { GoalsService } from '../../services/goals.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LabelType, Options, NgxSliderModule } from '@angular-slider/ngx-slider';
 
 @Component({
   selector: 'app-progress-tracker',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterOutlet, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterOutlet, RouterLinkActive, NgxSliderModule, FormsModule],
   templateUrl: './progress-tracker.component.html',
   styleUrl: './progress-tracker.component.css'
 })
 export class ProgressTrackerComponent {
   @ViewChild('closeBtn') closeBtn!: ElementRef;
+  isBrowser: boolean;
   currentDistance = 600;
   currentElevation = 100;
   allGoals: Goal[] = [];
   activeGoals: Goal[] = [];
 
+  newGoalSectionDisplayed: boolean = false;
+  newGoalTitle = "";
   newGoalMetricLabel: string = "Select Metric";
-  newGoalMetric:  string = "Distance";
+  newGoalMetric: string = "";
   newGoalDateLabel: string = "Select Target Date";
-  newGoalDate: string = "One Year";
+  newGoalDate: string = "";
+  newGoalTargetValue: number = 0;
+  
+ 
 
 
-  constructor(private goalService: GoalsService) { }
+  constructor(private goalService: GoalsService, @Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   addNewGoal(): void {
     let newGoal = new Goal("Cycle Across the US", "", "", 0, 1000, "distance", false);
@@ -65,6 +75,8 @@ export class ProgressTrackerComponent {
     this.newGoalDateLabel = date;
   }
 
+ 
+
 
 
 
@@ -100,4 +112,11 @@ export class ProgressTrackerComponent {
     }
     return progress;
   }
+
+  displayNewGoalForm() {
+
+    this.newGoalSectionDisplayed = !this.newGoalSectionDisplayed;
+  }
+
+
 }
