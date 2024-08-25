@@ -1,25 +1,145 @@
-.progress {
-    width: 50%;
-    background-color: #f3f3f3;
-    border: 1px solid #ccc;
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 0 15px;
+}
+
+
+/* Button Styles */
+button {
+    font-weight: 600;
     border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #ff00ff;
+    color: white;
+}
+
+button.btn-dark {
+    background-color: #343a40;
+    color: white;
+    border: none;
+}
+
+/* New Goal Form */
+.new-goal-form {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.new-goal-section {
+    margin-bottom: 15px;
+}
+
+.newGoal-metric,
+.newGoal-date {
+    width: 48%;
+}
+
+.dropdown-menu {
+    background-color: #343a40;
+    color: white;
+    border-radius: 5px;
+}
+
+.dropdown-item {
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item.active-metric,
+.dropdown-item.active-date {
+    background-color: #ff00ff;
+    color: white;
+}
+
+/* Main Content Layout */
+.main-content {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.goal-list-title,
+.summary-section-title {
+    font-size: 1.75rem;
+    color: #343a40;
+    margin-bottom: 10px;
+}
+
+.goal-list {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.goal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.progress {
+    background-color: #e9ecef;
+    border-radius: 5px;
+    height: 20px;
     overflow: hidden;
-    height: 25px;
+    margin-bottom: 20px;
 }
 
 .progress-bar {
-    height: 25px;
-    background-color: #4caf50;
-    transition: width 0.5s;
+    background-color: #ff00ff;
+    font-weight: 600;
+    color: white;
+    text-align: center;
 }
 
-.newGoal-input {
-    width: 100%;
-    padding: 6px;
-    background: transparent;
-    border: 2px solid rgb(253, 145, 253);
-    outline: none;
-    border-radius: 6px;
-    font-size: 16px;
-    margin: 6px 0px;
+/* Summary Section */
+.summary-section {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-metric-row {
+    margin-bottom: 15px;
+}
+
+.summary-metric-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.summary-metric p {
+    font-size: 1.25rem;
+    margin-top: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .goal-list,
+    .summary-section {
+        width: 100%;
+    }
 }

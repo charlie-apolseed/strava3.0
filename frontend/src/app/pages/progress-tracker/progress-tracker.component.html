@@ -11,10 +11,10 @@
                 <li><a routerLink="#" class="nav-link px-2 me-3"
                         style="color: rgb(255, 0, 255); font-weight: 600;">Strava
                         Visualizer</a></li>
-                <li><a routerLink="../activities" class="nav-link px-2 text-black">Activities</a></li>
+                <li><a routerLink="/activities" class="nav-link px-2 text-secondary">Activities</a></li>
                 <li><a routerLink="#" class="nav-link px-2 text-black">Map</a></li>
                 <li><a routerLink="#" class="nav-link px-2 text-black">Training Log</a></li>
-                <li><a routerLink="progress" class="nav-link px-2 text-secondary">Progress</a></li>
+                <li><a routerLink="/progress" class="nav-link px-2 text-black">Progress</a></li>
             </ul>
 
             <div class="text-end">
@@ -24,16 +24,7 @@
     </div>
     <hr class="mb-0">
 </header>
-<li *ngFor="let goal of activeGoals; let i = index">
-    <div class="goal-title">{{goal.title}}</div>
-    <div></div>
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" [style.width.%]="getProgress(i)"
-            [attr.aria-valuenow]="getProgress(i)" aria-valuemin="0" aria-valuemax="100">
-            {{getProgress(i)}}%
-        </div>
-    </div>
-</li>
+
 
 <button (click)="displayNewGoalForm()">Create New Goal</button>
 <button (click)="getAllGoals()">Get all goals</button>
@@ -83,3 +74,45 @@
 
     </div>
 </div>
+<!--CONTENT-->
+<div class="d-flex main-content">
+    <!-- Goal-list -->
+    <div class="goal-list col-7 ms-3 me-0">
+        <h1 class="goal-list-title">
+            Active Goals
+        </h1>
+        <hr class="mt-0">
+        <li *ngFor="let goal of activeGoals; let i = index" class="list-group-item">
+            <div class="goal-title">{{goal.title}}</div>
+            <div class="goal-start-date">Started: {{goal.startDate}}</div>
+            <div></div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" [style.width.%]="getProgress(i)"
+                    [attr.aria-valuenow]="getProgress(i)" aria-valuemin="0" aria-valuemax="100">
+                    {{getProgress(i)}}%
+                </div>
+            </div>
+            <hr>
+        </li>
+    </div>
+    <!-- Progress-summary -->
+    <div class="summary-section col ms-0 me-3">
+        <h1 class="summary-section-title">
+            Progress Summary
+        </h1>
+        <div class="all-time-totals">
+            <h1 class="all-time-totals-title">All-Time Totals</h1>
+            <div class="summary-metric-row d-flex justify-content-between">
+                <div class="summary-metric">
+                    <h2 class="summary-metric-title">Total Distance</h2>
+                    <p>{{allTimeDistance}}km</p>
+                </div>
+                <div class="summary-metric">
+                    <h2 class="summary-metric-title">Total Elevation</h2>
+                    <p>{{allTimeDistance}} km</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

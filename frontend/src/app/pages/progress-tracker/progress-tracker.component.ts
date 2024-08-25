@@ -17,8 +17,8 @@ import { LabelType, Options, NgxSliderModule } from '@angular-slider/ngx-slider'
 export class ProgressTrackerComponent {
   @ViewChild('closeBtn') closeBtn!: ElementRef;
   isBrowser: boolean;
-  currentDistance = 600;
-  currentElevation = 100;
+  allTimeDistance = 600;
+  allTimeElevation = 100;
   allGoals: Goal[] = [];
   activeGoals: Goal[] = [];
 
@@ -35,6 +35,11 @@ export class ProgressTrackerComponent {
 
   constructor(private goalService: GoalsService, @Inject(PLATFORM_ID) private platformId: Object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.getAllGoals();
+    this.getActiveGoals();
   }
 
   addNewGoal(): void {
@@ -106,9 +111,9 @@ export class ProgressTrackerComponent {
     const goalDifference = selectedGoal.targetValue - selectedGoal.startValue;
     let progress = 0;
     if (selectedGoal.metric == "distance") {
-      progress = (this.currentDistance - selectedGoal.startValue) / goalDifference * 100;
+      progress = (this.allTimeDistance - selectedGoal.startValue) / goalDifference * 100;
     } else if (selectedGoal.metric == "elevation") {
-      progress = (this.currentElevation - selectedGoal.startValue) / goalDifference * 100;
+      progress = (this.allTimeElevation - selectedGoal.startValue) / goalDifference * 100;
     }
     return progress;
   }
