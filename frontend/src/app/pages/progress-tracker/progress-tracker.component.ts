@@ -19,8 +19,35 @@ export class ProgressTrackerComponent {
   isBrowser: boolean;
   allTimeDistance = 600;
   allTimeElevation = 100;
-  allGoals: Goal[] = [];
-  activeGoals: Goal[] = [];
+  allGoals: Goal[] = [
+    {title: "Sample Goal 1",
+    startDate: "10/10/10",
+    targetDate: "11/11/11",
+    startValue: 0,
+    targetValue: 1000,
+    metric: "Elevation",
+    completed: false}, 
+    {title: "Sample Goal 2",
+      startDate: "10/10/10",
+      targetDate: "11/11/11",
+      startValue: 0,
+      targetValue: 2000,
+      metric: "Distance",
+      completed: false}];
+  activeGoals: Goal[] = [ {title: "Sample Goal 1",
+    startDate: "10/10/10",
+    targetDate: "11/11/11",
+    startValue: 0,
+    targetValue: 1000,
+    metric: "Elevation",
+    completed: false}, 
+    {title: "Sample Goal 2",
+      startDate: "10/10/10",
+      targetDate: "11/11/11",
+      startValue: 0,
+      targetValue: 2000,
+      metric: "Distance",
+      completed: false}];
 
   newGoalSectionDisplayed: boolean = false;
   newGoalTitle = "";
@@ -114,7 +141,7 @@ export class ProgressTrackerComponent {
       progress = (this.allTimeDistance - selectedGoal.startValue) / goalDifference * 100;
     } else if (selectedGoal.metric == "elevation") {
       progress = (this.allTimeElevation - selectedGoal.startValue) / goalDifference * 100;
-    }
+    } 
     return progress;
   }
 

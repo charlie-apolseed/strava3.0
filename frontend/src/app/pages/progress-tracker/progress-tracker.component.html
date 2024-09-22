@@ -39,9 +39,11 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="metricButton">
                 <a class="dropdown-item" [ngClass]="{'active-metric': newGoalMetric === 'Elevation'}"
-                    (click)="setNewGoalMetric('Elevation')">Date</a>
+                    (click)="setNewGoalMetric('Elevation')">Elevation</a>
                 <a class="dropdown-item" [ngClass]="{'active-metric': newGoalMetric === 'Distance'}"
                     (click)="setNewGoalMetric('Distance')">Distance</a>
+                <a class="dropdown-item" [ngClass]="{'active-metric': newGoalMetric === 'Mixed'}"
+                    (click)="setNewGoalMetric('Mixed')">Mixed</a>
             </div>
         </div>
         <div class="newGoal-date">
@@ -77,23 +79,15 @@
 <!--CONTENT-->
 <div class="d-flex main-content">
     <!-- Goal-list -->
-    <div class="goal-list col-7 ms-3 me-0">
-        <h1 class="goal-list-title">
-            Active Goals
-        </h1>
-        <hr class="mt-0">
-        <li *ngFor="let goal of activeGoals; let i = index" class="list-group-item">
-            <div class="goal-title">{{goal.title}}</div>
-            <div class="goal-start-date">Started: {{goal.startDate}}</div>
-            <div></div>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" [style.width.%]="getProgress(i)"
-                    [attr.aria-valuenow]="getProgress(i)" aria-valuemin="0" aria-valuemax="100">
-                    {{getProgress(i)}}%
-                </div>
+    <div class="goal-list-container col-8">
+        <h1>Active Goals</h1>
+        <hr>
+        <li *ngFor="let goal of activeGoals; let i = index">
+            <div class="active-goal-title">
+                <h2>{{goal.title}}</h2>
             </div>
-            <hr>
         </li>
+
     </div>
     <!-- Progress-summary -->
     <div class="summary-section col ms-0 me-3">
@@ -115,4 +109,3 @@
         </div>
     </div>
 </div>
-
