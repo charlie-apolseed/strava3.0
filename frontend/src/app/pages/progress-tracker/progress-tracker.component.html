@@ -26,7 +26,7 @@
 </header>
 
 
-<button (click)="displayNewGoalForm()">Create New Goal</button>
+<button (click)="addNewGoal()">Create New Goal</button>
 <button (click)="getAllGoals()">Get all goals</button>
 <button (click)="getActiveGoals()">Get active goals</button>
 
@@ -79,31 +79,58 @@
 <!--CONTENT-->
 <div class="d-flex main-content">
     <!-- Goal-list -->
-    <div class="goal-list-container col-8">
+    <div class="goal-list-container ms-3 col-9">
         <h1>Active Goals</h1>
         <hr>
-        <li *ngFor="let goal of activeGoals; let i = index">
-            <div class="active-goal-title">
-                <h2>{{goal.title}}</h2>
-            </div>
-        </li>
+        <!-- Two-column layout for the goals -->
+        <div class="row">
+            <div *ngFor="let goal of activeGoals; let i = index" class="col-md-6 mb-4">
+                <div class="card goal-card p-3">
+                    <!-- Card content container -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <!-- Left section: Title and Dates -->
+                        <div class="goal-information">
+                            <h2 class="card-title mb-2">{{goal.title}}</h2>
+                            <p class="card-subtitle text-muted">Start: {{goal.startDate}} --- End: {{goal.targetDate}}</p>
+                        </div>
+                        <!-- Right section: Progress Percentage -->
+                        <div class="progress-metric">
+                            <h3 class="progress-value mb-0">{{getProgress(i) | number: '1.0-0'}}%</h3>
+                        </div>
+                    </div>
+        
+                    <!-- Progress bar -->
+                    <div class="progress mt-3">
+                        <div
+                            class="progress-bar-pink"
+                            role="progressbar"
+                            [style.width]="getProgress(i) + '%'"
+                            [attr.aria-valuenow]="getProgress(i)"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        ></div>
+                    </div>
 
+                   
+                </div>
+            </div>
+        </div>
+        
+        
     </div>
+
     <!-- Progress-summary -->
     <div class="summary-section col ms-0 me-3">
-        <h1 class="summary-section-title">
-            Progress Summary
-        </h1>
         <div class="all-time-totals">
             <h1 class="all-time-totals-title">All-Time Totals</h1>
             <div class="summary-metric-row d-flex justify-content-between">
                 <div class="summary-metric">
                     <h2 class="summary-metric-title">Total Distance</h2>
-                    <p>{{allTimeDistance}}km</p>
+                    <p>{{allTimeDistance}} km</p>
                 </div>
                 <div class="summary-metric">
                     <h2 class="summary-metric-title">Total Elevation</h2>
-                    <p>{{allTimeDistance}} km</p>
+                    <p>{{allTimeElevation}} m</p>
                 </div>
             </div>
         </div>

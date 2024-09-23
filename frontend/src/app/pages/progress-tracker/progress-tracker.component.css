@@ -95,21 +95,6 @@ button.btn-dark {
     margin-bottom: 2px;
 }
 
-.progress {
-    background-color: #e9ecef;
-    border-radius: 5px;
-    height: 20px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.progress-bar {
-    background-color: #ff00ff;
-    font-weight: 600;
-    color: white;
-    text-align: center;
-}
-
 /* Summary Section */
 .summary-section {
     background-color: #ffffff;
@@ -142,4 +127,9 @@ button.btn-dark {
     .summary-section {
         width: 100%;
     }
+}
+
+/* Custom pink progress bar */
+.progress-bar-pink {
+    background-color: #ff00FF; /* Use the hex code for pink or any other shade of pink you prefer */
 }

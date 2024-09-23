@@ -66,13 +66,14 @@ export class ProgressTrackerComponent {
 
   async ngOnInit(): Promise<void> {
     this.getAllGoals();
-    this.getActiveGoals();
+    this.getActiveGoals(); 
   }
 
   addNewGoal(): void {
-    let newGoal = new Goal("Cycle Across the US", "", "", 0, 1000, "distance", false);
+    let newGoal = new Goal("Cycle Across the US", "10/10/10", "11/11/11", 0, 1000, "distance", false);
     this.goalService.addNewGoal(newGoal).subscribe({
       next: (response) => {
+        this.getAllGoals()
         console.log(response);
       },
       error: (error) => {
@@ -149,6 +150,5 @@ export class ProgressTrackerComponent {
 
     this.newGoalSectionDisplayed = !this.newGoalSectionDisplayed;
   }
-
 
 }
