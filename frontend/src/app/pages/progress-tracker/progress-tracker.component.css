@@ -108,14 +108,21 @@ button.btn-dark {
 }
 
 .summary-metric-title {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 500;
 }
 
-.summary-metric p {
+.summary-metric-month {
+    font-size: 1.25rem;
+    color: #8f9296;
+}
+
+.summary-metric-all-time {
     font-size: 1.25rem;
     margin-top: 5px;
 }
+
+
 
 /* Responsive Design */
 @media (max-width: 992px) {

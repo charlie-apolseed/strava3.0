@@ -11,10 +11,10 @@
                 <li><a routerLink="#" class="nav-link px-2 me-3"
                         style="color: rgb(255, 0, 255); font-weight: 600;">Strava
                         Visualizer</a></li>
-                <li><a routerLink="/activities" class="nav-link px-2 text-secondary">Activities</a></li>
+                <li><a routerLink="/activities" class="nav-link px-2 text-black">Activities</a></li>
                 <li><a routerLink="#" class="nav-link px-2 text-black">Map</a></li>
                 <li><a routerLink="#" class="nav-link px-2 text-black">Training Log</a></li>
-                <li><a routerLink="/progress" class="nav-link px-2 text-black">Progress</a></li>
+                <li><a routerLink="/progress" class="nav-link px-2 text-secondary">Progress</a></li>
             </ul>
 
             <div class="text-end">
@@ -24,11 +24,6 @@
     </div>
     <hr class="mb-0">
 </header>
-
-
-<button (click)="addNewGoal()">Create New Goal</button>
-<button (click)="getAllGoals()">Get all goals</button>
-<button (click)="getActiveGoals()">Get active goals</button>
 
 <div class="new-goal-form" *ngIf="newGoalSectionDisplayed">
     <div class="d-flex justify-content-between new-goal-section metric-and-date">
@@ -91,48 +86,58 @@
                         <!-- Left section: Title and Dates -->
                         <div class="goal-information">
                             <h2 class="card-title mb-2">{{goal.title}}</h2>
-                            <p class="card-subtitle text-muted">Start: {{goal.startDate}} --- End: {{goal.targetDate}}</p>
+                            <p class="card-subtitle text-muted">Start: {{goal.startDate}} --- End: {{goal.targetDate}}
+                            </p>
                         </div>
                         <!-- Right section: Progress Percentage -->
                         <div class="progress-metric">
                             <h3 class="progress-value mb-0">{{getProgress(i) | number: '1.0-0'}}%</h3>
                         </div>
                     </div>
-        
+
                     <!-- Progress bar -->
                     <div class="progress mt-3">
-                        <div
-                            class="progress-bar-pink"
-                            role="progressbar"
-                            [style.width]="getProgress(i) + '%'"
-                            [attr.aria-valuenow]="getProgress(i)"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                        ></div>
+                        <div class="progress-bar-pink" role="progressbar" [style.width]="getProgress(i) + '%'"
+                            [attr.aria-valuenow]="getProgress(i)" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
 
-                   
+
                 </div>
             </div>
         </div>
-        
-        
+
+
     </div>
 
     <!-- Progress-summary -->
     <div class="summary-section col ms-0 me-3">
         <div class="all-time-totals">
-            <h1 class="all-time-totals-title">All-Time Totals</h1>
-            <div class="summary-metric-row d-flex justify-content-between">
-                <div class="summary-metric">
-                    <h2 class="summary-metric-title">Total Distance</h2>
-                    <p>{{allTimeDistance}} km</p>
-                </div>
-                <div class="summary-metric">
-                    <h2 class="summary-metric-title">Total Elevation</h2>
-                    <p>{{allTimeElevation}} m</p>
-                </div>
+            <h1 class="all-time-totals-title">Totals</h1>
+            <hr>
+            <div class="summary-metric">
+                <h2 class="summary-metric-title">Distance:</h2>
+                <p class="summary-metric-all-time ms-3 my-0">All Time: {{allTimeDistance}} km</p>
+                <p class="summary-metric-month ms-3 mt-0">Month: {{oneMonthAgoDistance}} km</p>
+            </div>
+            <div class="summary-metric">
+                <h2 class="summary-metric-title">Elevation:</h2>
+                <p class="summary-metric-all-time ms-3 my-0">All Time: {{allTimeElevation}} meters</p>
+                <p class="summary-metric-month ms-3 mt-0">Month: {{oneMonthAgoElevation}} meters</p>
+            </div>
+            <div class="summary-metric">
+                <h2 class="summary-metric-title">Activities:</h2>
+                <p class="summary-metric-all-time ms-3 my-0">All Time: {{allTimeActivities}} Activities</p>
+                <p class="summary-metric-month ms-3 mt-0">Month: {{oneMonthAgoActivities}} Activites</p>
+            </div>
+            <div class="summary-metric">
+                <h2 class="summary-metric-title">Time:</h2>
+                <p class="summary-metric-all-time ms-3 my-0">All Time: {{allTimeTime}} Hours</p>
+                <p class="summary-metric-month ms-3 mt-0">Month: {{oneMonthAgoTime}} Hours</p>
             </div>
         </div>
     </div>
 </div>
+
+<button (click)="addNewGoal()">Create New Goal</button>
+<button (click)="getAllGoals()">Get all goals</button>
+<button (click)="getActiveGoals()">Get active goals</button>
